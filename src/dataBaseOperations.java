@@ -9,12 +9,12 @@ public class dataBaseOperations {
     private String username;
     private String password;
 
-    public dataBaseOperations(String dataBaseName, String username, String password) {
-        this.dataBaseName = dataBaseName;
-        this.username = username;
-        this.password = password;
-        this.dbURL = this.dbURL + this.dataBaseName;
-        this.connectToDataBase(this.username, this.password);
+    public dataBaseOperations() {
+//        this.dataBaseName = dataBaseName;
+//        this.username = username;
+//        this.password = password;
+//        this.dbURL = this.dbURL + this.dataBaseName;
+//        this.connectToDataBase(this.username, this.password);
     }
 
     public boolean isDBexist(String dbName) {
@@ -56,7 +56,11 @@ public class dataBaseOperations {
         return true;
     }
 
-    public boolean connectToDataBase(String username, String password) {
+    public boolean connectToDataBase(String dataBaseName, String username, String password) {
+        this.dataBaseName = dataBaseName;
+        this.username = username;
+        this.password = password;
+        this.dbURL = this.dbURL + this.dataBaseName;
         try{
             ResultSet listOfDb = null;
             this.connection = DriverManager.getConnection(this.dbURL, this.username, this.password);
@@ -108,6 +112,13 @@ public class dataBaseOperations {
                 return false;
             }
         } else {return false;}
+    }
+
+    public boolean isConnected () {
+        if (connection != null) {
+            return true;
+        }
+        return false;
     }
 
 
