@@ -4,8 +4,9 @@ public class main {
     public static void main(String[] args) {
         dataBaseOperations newBD = new dataBaseOperations();
         Scanner userInput = new Scanner(System.in);
+        System.out.println("Welcome to the data Base manager.");
         while (true) {
-            System.out.println("Welcome to the data Base manager. Please select one of the option below:");
+            System.out.println("Please select one of the option below:");
             System.out.println("1:  Connect to Data Base;");
             System.out.println("2.  Print out list of tables available;");
             System.out.println("3.  Clear table content");
@@ -49,11 +50,15 @@ public class main {
             else if (userChoice == 10) {}
             else if (userChoice == 11) {
                 System.out.print("You are about to close connection" +
-                        "Please confirm Y/N");
+                        "Please confirm Y/N ");
                 String userSelect = userInput.nextLine();
                 if (userSelect.equals("Y") || userSelect.equals("y")) {
-                    newBD.closeConnection();
-                    break;
+                    if (newBD.closeConnection()) {
+                        System.out.println("You have successfully close connection and exit the program");
+                        break;
+                    }else {
+                        System.out.println("Something went wrong");
+                    }
                 }else {
                     System.out.println("You selected not ot close connection.");
                 };
