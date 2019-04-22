@@ -1,7 +1,9 @@
 package dataBase;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 public class DataBaseOperations implements DataBaseInterface {
@@ -86,19 +88,20 @@ public class DataBaseOperations implements DataBaseInterface {
     }
 
     @Override
-    public boolean printTables() {
+    public List<String> printTables() {
+        List<String> listOfTables = new ArrayList<>();
         if (connection != null) {
             try {
                 DatabaseMetaData md = connection.getMetaData();
                 ResultSet rs = md.getTables(this.dataBaseName, null, "%", new String[]{"TABLE"});
                 while (rs.next()) {
-                    System.out.println(rs.getString(3));
+                    listOfTables.add(rs.getString(3));
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
-        return true;
+        return listOfTables;
     }
 
     @Override

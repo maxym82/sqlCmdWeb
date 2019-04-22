@@ -1,14 +1,18 @@
-package command;
+package controller.command;
 
+import controller.Command;
 import dataBase.DataBaseInterface;
+import view.View;
 
 import java.util.Scanner;
 
 public class ConnectToDataBase implements Command {
     private DataBaseInterface dataBase;
+    private View console;
 
-    public ConnectToDataBase (DataBaseInterface dataBase) {
-
+    public ConnectToDataBase (DataBaseInterface dataBase, View console) {
+        this.console = console;
+        this.dataBase = dataBase;
     }
     @Override
     public void execute() {

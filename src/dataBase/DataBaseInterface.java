@@ -1,5 +1,7 @@
 package dataBase;
 
+import java.util.List;
+
 public interface DataBaseInterface {
 
     boolean isDBexist(String dbName);
@@ -10,7 +12,7 @@ public interface DataBaseInterface {
 
     boolean connectToDataBase(String dataBaseName, String username, String password);
 
-    boolean printTables();
+    List<String> printTables();
 
     boolean clearTable(String tableName);
 
