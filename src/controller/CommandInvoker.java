@@ -18,7 +18,7 @@ public class CommandInvoker {
     private Connection connection;
     private ArrayList<String> userInput;
     private final String prompt = "sqlCmd_> ";
-    private final String[] commandsAvailable = {"connect", "clear", "close", "create", "createTable", "drop", "delete", "find", "pdn", "help", "insert", "print", "update"};
+    private final String[] commandsAvailable = {"connect", "clear", "close", "create", "createTable", "drop", "delete", "find", "pdn", "help", "insert", "print", "update", "exit"};
 
     public CommandInvoker () {
     this.inputOutput = new InputOutput();
@@ -52,7 +52,10 @@ public class CommandInvoker {
         while (true) {
             userInput = new ArrayList<>(Arrays.asList(inputOutput.input(prompt).split(" +")));
             if (Arrays.stream(commandsAvailable).anyMatch(userInput.get(0)::equals)) {
-                if (((userInput.get(0).toLowerCase()).equals("exit"))) {break;}
+                if (((userInput.get(0).toLowerCase()).equals("exit"))) {
+//                    todo: close connection if opened and exit from program
+                    break;}
+
 
                 inputOutput.output("we are working");
 
