@@ -13,6 +13,12 @@ public class FindTable implements Command {
         this.console = console;
         this.dataBase = dataBase;
     }
+
+    @Override
+    public boolean ifExecutable() {
+        return false;
+    }
+
     @Override
     public void execute() {
         dataBase.findTable(this.tableName);

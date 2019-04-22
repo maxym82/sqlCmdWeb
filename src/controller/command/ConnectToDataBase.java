@@ -14,6 +14,12 @@ public class ConnectToDataBase implements Command {
         this.console = console;
         this.dataBase = dataBase;
     }
+
+    @Override
+    public boolean ifExecutable() {
+        return false;
+    }
+
     @Override
     public void execute() {
         Scanner userInput = new Scanner(System.in);

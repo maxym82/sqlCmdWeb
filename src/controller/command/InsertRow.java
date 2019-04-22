@@ -15,6 +15,11 @@ public class InsertRow implements Command {
 
 
     @Override
+    public boolean ifExecutable() {
+        return false;
+    }
+
+    @Override
     public void execute() {
 
     }

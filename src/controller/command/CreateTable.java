@@ -12,6 +12,12 @@ public class CreateTable implements Command {
         this.dataBase = dataBase;
         this.console = console;
     }
+
+    @Override
+    public boolean ifExecutable() {
+        return false;
+    }
+
     @Override
     public void execute() {
 

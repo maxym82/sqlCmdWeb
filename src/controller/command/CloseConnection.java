@@ -12,6 +12,12 @@ public class CloseConnection implements Command {
         this.console = console;
         this.dataBase = dataBase;
     }
+
+    @Override
+    public boolean ifExecutable() {
+        return false;
+    }
+
     @Override
     public void execute() {
         this.dataBase.closeConnection();

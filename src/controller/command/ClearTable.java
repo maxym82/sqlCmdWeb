@@ -12,6 +12,12 @@ public class ClearTable implements Command {
         this.dataBase = dataBase;
         this.console = console;
     }
+
+    @Override
+    public boolean ifExecutable() {
+        return false;
+    }
+
     @Override
     public void execute() {
         this.dataBase.clearTable(this.tableName);

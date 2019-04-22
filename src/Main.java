@@ -1,9 +1,17 @@
+import controller.CommandInvoker;
 import dataBase.DataBaseOperations;
 
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
+        CommandInvoker commandInterface = new CommandInvoker();
+
+        commandInterface.start();
+
+    }
+
+    private static void oldMain() {
         DataBaseOperations newBD = new DataBaseOperations();
         Scanner userInput = new Scanner(System.in);
         System.out.println("Welcome to the data Base manager.");
@@ -86,10 +94,5 @@ public class Main {
 
 
         }
-
-//        newBD.printTables();
-//        newBD.findTable("tracklist");
-//        newBD.closeConnection();
-
     }
 }
