@@ -1,8 +1,10 @@
+import dataBase.DataBaseOperations;
+
 import java.util.Scanner;
 
-public class main {
+public class Main {
     public static void main(String[] args) {
-        dataBaseOperations newBD = new dataBaseOperations();
+        DataBaseOperations newBD = new DataBaseOperations();
         Scanner userInput = new Scanner(System.in);
         System.out.println("Welcome to the data Base manager.");
         while (true) {
@@ -39,11 +41,26 @@ public class main {
                     System.out.println("Semething went wrong, please check DB name, and user credentials");
                 }
             }
-            else if (userChoice == 2) {}
+            else if (userChoice == 2) {
+                if (newBD.isConnected()) {
+                    System.out.println("At DB with name " + newBD.getDataBaseName() + "following ables available:");
+                    newBD.printTables();
+                }else {
+                    System.out.println("You are not connected to any DB.");
+                }
+            }
             else if (userChoice == 3) {}
             else if (userChoice == 4) {}
             else if (userChoice == 5) {}
-            else if (userChoice == 6) {}
+            else if (userChoice == 6) {
+                if (newBD.isConnected()) {
+                    System.out.print("Please enter table name: ");
+                    String tableName = userInput.nextLine();
+                    newBD.findTable(tableName);
+                }else {
+                    System.out.println("You are not connected to any DB.");
+                }
+            }
             else if (userChoice == 7) {}
             else if (userChoice == 8) {}
             else if (userChoice == 9) {}

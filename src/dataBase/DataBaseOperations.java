@@ -1,15 +1,17 @@
+package dataBase;
+
 import java.sql.*;
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class dataBaseOperations {
+public class DataBaseOperations implements DataBaseInterface {
     private String dataBaseName;
     private String dbURL = "jdbc:postgresql://localhost:5432/";
     private Connection connection = null;
     private String username;
     private String password;
 
-    public dataBaseOperations() {
+    public DataBaseOperations() {
 //        this.dataBaseName = dataBaseName;
 //        this.username = username;
 //        this.password = password;
@@ -17,6 +19,7 @@ public class dataBaseOperations {
 //        this.connectToDataBase(this.username, this.password);
     }
 
+    @Override
     public boolean isDBexist(String dbName) {
         try{
             ResultSet listOfDb = null;
@@ -47,15 +50,18 @@ public class dataBaseOperations {
         return false;
     }
 
+    @Override
     public String getDataBaseName() {
         return dataBaseName;
     }
 
+    @Override
     public boolean createDB() {
 //        todo: implement method to create DB
         return true;
     }
 
+    @Override
     public boolean connectToDataBase(String dataBaseName, String username, String password) {
         this.dataBaseName = dataBaseName;
         this.username = username;
@@ -74,10 +80,12 @@ public class dataBaseOperations {
         } catch (SQLException e) {
             System.out.println("something went wrong, please check your database name, user name and password");
             e.printStackTrace();
+
         }
         return false;
     }
 
+    @Override
     public boolean printTables() {
         if (connection != null) {
             try {
@@ -93,10 +101,27 @@ public class dataBaseOperations {
         return true;
     }
 
-    public boolean clearTable() {
-        return true;
+    @Override
+    public boolean clearTable(String tableName) {
+        if (connection != null) {
+            try {
+                Statement stmt = connection.createStatement();
+                // Use TRUNCATE
+                String sql = "TRUNCATE my_table";
+                // Execute deletion
+                stmt.executeUpdate(sql);
+                stmt.close();
+                return true;
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return false;
+            }
+
+        }
+        return false;
     }
 
+    @Override
     public boolean dropTable() {
         if (connection != null) {
             Scanner userInput = new Scanner(System.in);
@@ -106,6 +131,7 @@ public class dataBaseOperations {
             try {
                 Statement statement = connection.createStatement();
                 statement.execute(stringStatement);
+                statement.close();
                 return true;
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -114,6 +140,7 @@ public class dataBaseOperations {
         } else {return false;}
     }
 
+    @Override
     public boolean isConnected () {
         if (connection != null) {
             return true;
@@ -122,6 +149,7 @@ public class dataBaseOperations {
     }
 
 
+    @Override
     public boolean createTable() {
         String[] dataTypes = new String [] {"BOOL", "CHAR", "VARCHAR", "TEXT", "SMALLINT", "INT", "SERIAL", "float", "DATE",
                 "TIME", "TIMESTAMP", "INTERVAL", "UUID", "Array", "JSON", "hstore"};
@@ -191,6 +219,7 @@ public class dataBaseOperations {
         else {return false;}
     }
 
+    @Override
     public boolean findTable(String tableName) {
         if (connection != null) {
             try {
@@ -215,25 +244,30 @@ public class dataBaseOperations {
         return true;
     }
 
+    @Override
     public boolean insertROW() {
 //        todo: this is to insert one row in a table
         return true;
     }
 
+    @Override
     public boolean updateValue() {
 //        todo: this is to update the vatue
         return true;
     }
 
+    @Override
     public boolean deleteValue() {
 
         return true;
     }
 
+    @Override
     public void help() {
 
     }
 
+    @Override
     public boolean closeConnection() {
         try {
             connection.close();
