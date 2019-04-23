@@ -68,10 +68,10 @@ public class DataBaseOperations implements DataBaseInterface {
         this.dataBaseName = dataBaseName;
         this.username = username;
         this.password = password;
-        this.dbURL = this.dbURL + this.dataBaseName;
+        String dbURL = this.dbURL + this.dataBaseName;
         try{
             ResultSet listOfDb = null;
-            this.connection = DriverManager.getConnection(this.dbURL, this.username, this.password);
+            this.connection = DriverManager.getConnection(dbURL, this.username, this.password);
             if (connection != null) {
                 return true;
             }

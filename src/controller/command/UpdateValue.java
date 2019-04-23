@@ -4,6 +4,8 @@ import controller.Command;
 import dataBase.DataBaseInterface;
 import view.View;
 
+import java.util.ArrayList;
+
 public class UpdateValue implements Command {
     private DataBaseInterface dataBase;
     private View console;
@@ -14,12 +16,12 @@ public class UpdateValue implements Command {
     }
 
     @Override
-    public boolean ifExecutable() {
+    public boolean isExecutable(ArrayList<String> command) {
         return false;
     }
 
     @Override
-    public void execute() {
+    public void execute(ArrayList<String> command) {
 
     }
 }

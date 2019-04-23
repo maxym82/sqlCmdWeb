@@ -1,9 +1,11 @@
 package controller;
 
+import java.util.ArrayList;
+
 public interface Command {
 
-    boolean ifExecutable();
+    boolean isExecutable(ArrayList<String> command);
 
-    void execute();
+    void execute(ArrayList<String> command);
     //void undo();
 }

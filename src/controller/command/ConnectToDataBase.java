@@ -2,40 +2,38 @@ package controller.command;
 
 import controller.Command;
 import dataBase.DataBaseInterface;
-import view.View;
+import view.InputOutput;
 
-import java.util.Scanner;
+import java.util.ArrayList;
 
 public class ConnectToDataBase implements Command {
     private DataBaseInterface dataBase;
-    private View console;
+    private InputOutput console;
+    private final String userPassword;
+    private final boolean debug = true;
 
-    public ConnectToDataBase (DataBaseInterface dataBase, View console) {
+    public ConnectToDataBase (DataBaseInterface dataBase, InputOutput console) {
         this.console = console;
         this.dataBase = dataBase;
+        if (debug) {userPassword = console.input("password: ");}
+        else {userPassword = String.valueOf(this.console.inputPassword());}
     }
 
     @Override
-    public boolean ifExecutable() {
-        return false;
+    public boolean isExecutable(ArrayList<String> command) {
+        if (!command.get(0).equals("connect") || command.size() != 3) {return false;}
+        else {return true;}
     }
 
     @Override
-    public void execute() {
-        Scanner userInput = new Scanner(System.in);
-        System.out.println("Please provide DB name and user credentials.");
-        System.out.print("Data Base name: ");
-        String dataBaseName = userInput.nextLine();
-        System.out.print("User name: ");
-        String userName = userInput.nextLine();
-        System.out.print("Password: ");
-        String userPassword = userInput.nextLine();
-        dataBase.connectToDataBase(dataBaseName, userName, userPassword);
+    public void execute(ArrayList<String> command) {
+
+        dataBase.connectToDataBase(command.get(1), command.get(2), userPassword);
         if (dataBase.isConnected()) {
-            System.out.println("You hafe connected to DB:" + dataBaseName);
+            console.output("You hafe connected to DB:" + command.get(1));
         }
         else {
-            System.out.println("Semething went wrong, please check DB name, and user credentials");
+            console.output("Semething went wrong, please check DB name, and user credentials");
         }
 
     }
