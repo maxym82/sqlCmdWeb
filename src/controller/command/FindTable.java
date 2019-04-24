@@ -5,6 +5,7 @@ import dataBase.DataBaseInterface;
 import view.View;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class FindTable implements Command {
     private DataBaseInterface dataBase;
@@ -27,7 +28,12 @@ public class FindTable implements Command {
 
     @Override
     public void execute(ArrayList<String> command) {
-        dataBase.findTable(command.get(1));
+        for (List<String> row: dataBase.findTable(command.get(1))) {
+            for (String  element: row) {
+                this.console.output(element);
+            }
+            this.console.outputln("");
+        }
 
     }
 }

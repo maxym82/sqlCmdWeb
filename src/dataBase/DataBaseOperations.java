@@ -223,8 +223,8 @@ public class DataBaseOperations implements DataBaseInterface {
     }
 
     @Override
-    public List<List<String>> findTable(String tableName) {
-        List<List<String>> tableContent = new ArrayList<List<String>>();
+    public ArrayList<List<String>> findTable(String tableName) {
+        ArrayList<List<String>> tableContent = new ArrayList<List<String>>();
         if (connection != null) {
             try {
                 Statement statement = connection.createStatement();
