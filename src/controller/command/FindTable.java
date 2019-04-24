@@ -18,11 +18,16 @@ public class FindTable implements Command {
 
     @Override
     public boolean isExecutable(ArrayList<String> command) {
-        return false;
+        if (!command.get(0).equals("find") || command.size() != 2) {
+            console.outputln("Incorrect command format, please type \"help\" for help");
+            return false;
+        }
+        else {return true;}
     }
 
     @Override
     public void execute(ArrayList<String> command) {
-        dataBase.findTable(this.tableName);
+        dataBase.findTable(command.get(1));
+
     }
 }

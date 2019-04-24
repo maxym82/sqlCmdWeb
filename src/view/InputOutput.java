@@ -12,8 +12,13 @@ public class InputOutput implements View {
     }
 
     @Override
-    public void output(String text) {
+    public void outputln(String text) {
         System.out.println(text);
+    }
+
+    @Override
+    public void output(String text) {
+        System.out.print(text);
     }
 
 

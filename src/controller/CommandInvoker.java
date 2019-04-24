@@ -5,7 +5,7 @@ import controller.command.*;
 import dataBase.DataBaseInterface;
 import dataBase.DataBaseOperations;
 import view.InputOutput;
-import view.View;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,19 +40,19 @@ public class CommandInvoker {
         commands.add(new GetDataBaseName(this.dataBase, this.inputOutput));
         commands.add(new Help());
         commands.add(new InsertRow(this.dataBase, this.inputOutput));
-        commands.add(new PrintTable(this.dataBase, this.inputOutput));
+        commands.add(new listTables(this.dataBase, this.inputOutput));
         commands.add(new UpdateValue(this.dataBase, this.inputOutput));
     }
 
     public void start () {
-        inputOutput.output("Welcome to sqlCmd.");
-        inputOutput.output("For list of commands available type help.");
-        inputOutput.output("For help on a particular comment type command following by \"?\"");
+        inputOutput.outputln("Welcome to sqlCmd.");
+        inputOutput.outputln("For list of commands available type help.");
+        inputOutput.outputln("For help on a particular comment type command following by \"?\"");
 
         while (true) {
             if (!this.dataBase.isConnected()) {
-                inputOutput.output("You are on an unconnected mode.");
-                inputOutput.output("Type your commend here");
+                inputOutput.outputln("You are on an unconnected mode.");
+                inputOutput.outputln("Type your commend here");
                 userInput = new ArrayList<String>(Arrays.asList(inputOutput.input(prompt).split(" +")));
                 if (Arrays.stream(commandsWhenNotConnected).anyMatch(userInput.get(0)::equals)) {
                     if (userInput.get(0).equals("help")) {}
@@ -65,13 +65,13 @@ public class CommandInvoker {
                     }
 
                 }else {
-                    inputOutput.output("This command is not supported on this mode, please type help for \"help\"");
+                    inputOutput.outputln("This command is not supported on this mode, please type help for \"help\"");
                 }
 
             }
             else {
-                inputOutput.output("You are on connected mode");
-                inputOutput.output("Type your command here");
+                inputOutput.outputln("You are on connected mode");
+                inputOutput.outputln("Type your command here");
                 userInput = new ArrayList<String>(Arrays.asList(inputOutput.input(prompt).split(" +")));
                 for (Command command: commands) {
                     if (command.isExecutable(userInput)) {command.execute(userInput);}

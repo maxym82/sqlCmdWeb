@@ -88,7 +88,7 @@ public class DataBaseOperations implements DataBaseInterface {
     }
 
     @Override
-    public List<String> printTables() {
+    public List<String> listTables() {
         List<String> listOfTables = new ArrayList<>();
         if (connection != null) {
             try {
@@ -223,28 +223,33 @@ public class DataBaseOperations implements DataBaseInterface {
     }
 
     @Override
-    public boolean findTable(String tableName) {
+    public List<List<String>> findTable(String tableName) {
+        List<List<String>> tableContent = new ArrayList<List<String>>();
         if (connection != null) {
             try {
                 Statement statement = connection.createStatement();
                 ResultSet result = statement.executeQuery("SELECT  * from " + tableName);
                 ResultSetMetaData rsmd = result.getMetaData();
                 int columnNumber = rsmd.getColumnCount();
+                List<String> header = new ArrayList<String>();
                 while (result.next()){
                     for (int i = 1; i <= columnNumber ; i++) {
-                        System.out.print(rsmd.getColumnName(i) + "  ");
+                        header.add(rsmd.getColumnName(i));
                     }
+                    ArrayList<String> row = new ArrayList<String>();
+                    tableContent.add(header);
                     System.out.println();
+                    row = null;
                     for (int i = 1; i <= columnNumber; i++) {
-                        System.out.print(result.getString(i) + "  ");
+                        row.add(result.getString(i));
                     }
-                    System.out.println();
+                    tableContent.add(row);
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
-        return true;
+        return tableContent;
     }
 
     @Override

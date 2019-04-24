@@ -12,7 +12,7 @@ public interface DataBaseInterface {
 
     boolean connectToDataBase(String dataBaseName, String username, String password);
 
-    List<String> printTables();
+    List<String> listTables();
 
     boolean clearTable(String tableName);
 
@@ -23,7 +23,7 @@ public interface DataBaseInterface {
 
     boolean createTable();
 
-    boolean findTable(String tableName);
+    List<List<String>> findTable(String tableName);
 
     boolean insertROW();
 

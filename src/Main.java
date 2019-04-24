@@ -52,7 +52,7 @@ public class Main {
             else if (userChoice == 2) {
                 if (newBD.isConnected()) {
                     System.out.println("At DB with name " + newBD.getDataBaseName() + "following ables available:");
-                    newBD.printTables();
+                    newBD.listTables();
                 }else {
                     System.out.println("You are not connected to any DB.");
                 }
