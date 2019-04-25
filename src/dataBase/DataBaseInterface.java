@@ -1,5 +1,6 @@
 package dataBase;
 
+import java.sql.ResultSet;
 import java.util.List;
 
 public interface DataBaseInterface {
@@ -23,7 +24,7 @@ public interface DataBaseInterface {
 
     boolean createTable();
 
-    List<List<String>> findTable(String tableName);
+    ResultSet findTable(String tableName);
 
     boolean insertROW();
 

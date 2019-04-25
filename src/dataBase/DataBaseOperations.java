@@ -223,33 +223,34 @@ public class DataBaseOperations implements DataBaseInterface {
     }
 
     @Override
-    public ArrayList<List<String>> findTable(String tableName) {
-        ArrayList<List<String>> tableContent = new ArrayList<List<String>>();
+    public ResultSet findTable(String tableName) {
+        ResultSet result = null;
         if (connection != null) {
             try {
                 Statement statement = connection.createStatement();
-                ResultSet result = statement.executeQuery("SELECT  * from " + tableName);
+                result = statement.executeQuery("SELECT  * from " + tableName);
                 ResultSetMetaData rsmd = result.getMetaData();
-                int columnNumber = rsmd.getColumnCount();
-                List<String> header = new ArrayList<String>();
-                while (result.next()){
-                    for (int i = 1; i <= columnNumber ; i++) {
-                        header.add(rsmd.getColumnName(i));
-                    }
-                    ArrayList<String> row = new ArrayList<String>();
-                    tableContent.add(header);
-                    System.out.println();
-                    row = null;
-                    for (int i = 1; i <= columnNumber; i++) {
-                        row.add(result.getString(i));
-                    }
-                    tableContent.add(row);
-                }
+                if (rsmd.getColumnCount() == 0); {throw new SQLException("Table " + tableName + " does not exist");}
+//                List<String> header = new ArrayList<String>();
+//                while (result.next()){
+//                    for (int i = 1; i <= columnNumber ; i++) {
+//                        header.add(rsmd.getColumnName(i));
+//                    }
+//                    ArrayList<String> row = new ArrayList<String>();
+//                    tableContent.add(header);
+//                    System.out.println();
+//                    row = null;
+//                    for (int i = 1; i <= columnNumber; i++) {
+//                        if (result.getString(i) != null)
+//                        {row.add(result.getString(i));}
+//                    }
+//                    tableContent.add(row);
+//                }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
-        return tableContent;
+        return result;
     }
 
     @Override
