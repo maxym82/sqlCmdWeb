@@ -230,22 +230,8 @@ public class DataBaseOperations implements DataBaseInterface {
                 Statement statement = connection.createStatement();
                 result = statement.executeQuery("SELECT  * from " + tableName);
                 ResultSetMetaData rsmd = result.getMetaData();
-                if (rsmd.getColumnCount() == 0); {throw new SQLException("Table " + tableName + " does not exist");}
-//                List<String> header = new ArrayList<String>();
-//                while (result.next()){
-//                    for (int i = 1; i <= columnNumber ; i++) {
-//                        header.add(rsmd.getColumnName(i));
-//                    }
-//                    ArrayList<String> row = new ArrayList<String>();
-//                    tableContent.add(header);
-//                    System.out.println();
-//                    row = null;
-//                    for (int i = 1; i <= columnNumber; i++) {
-//                        if (result.getString(i) != null)
-//                        {row.add(result.getString(i));}
-//                    }
-//                    tableContent.add(row);
-//                }
+                if (rsmd.getColumnCount() == 0) {throw new SQLException("Table \" " + tableName + " \" does not exist");}
+
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -280,6 +266,7 @@ public class DataBaseOperations implements DataBaseInterface {
     public boolean closeConnection() {
         try {
             connection.close();
+            connection = null;
             return  true;
         } catch (SQLException e) {
             e.printStackTrace();

@@ -17,7 +17,7 @@ public class CommandInvoker {
     private List<Command> commands;
     private Connection connection;
     private ArrayList<String> userInput;
-    private final String prompt = "sqlCmd_> ";
+    private String prompt;
     private final String[] commandsAvailableWhenConnected = {"clear", "close", "create", "createTable", "drop", "delete", "find", "pdn", "help", "insert", "print", "update", "exit"};
     private final String[] commandsWhenNotConnected = {"connect", "help", "exit"};
 
@@ -27,6 +27,15 @@ public class CommandInvoker {
     commands = new ArrayList<>();
     userInput = new ArrayList<String>();
     this.setCommandList();
+    this.setPrompt();
+    }
+
+    private void setPrompt (String line) {
+        this.prompt = line;
+    }
+
+    private void setPrompt() {
+        this.prompt = "sqlCmd_> ";
     }
 
     private void setCommandList () {
@@ -49,7 +58,7 @@ public class CommandInvoker {
         inputOutput.outputln("For list of commands available type help.");
         inputOutput.outputln("For help on a particular comment type command following by \"?\"");
 
-        while (true) {
+        loop: while (true) {
             if (!this.dataBase.isConnected()) {
                 inputOutput.outputln("You are on an unconnected mode.");
                 inputOutput.outputln("Type your commend here");
@@ -57,11 +66,22 @@ public class CommandInvoker {
                 if (Arrays.stream(commandsWhenNotConnected).anyMatch(userInput.get(0)::equals)) {
                     if (userInput.get(0).equals("help")) {}
                     if (userInput.get(0).equals("exit")) {
+                        String userSelect = inputOutput.input("You are about to close the progran, please confirm (Y/N): ").toUpperCase();
+                        while (true) {
 //                        todo: check if i need to close any connection. should not be a problem, we did chec it on a condition above
-                        break;}
+                            if (userSelect.equals("Y")){
+                                inputOutput.outputln("Programm saccessfully closed");
+                                break loop;
+                            }else if (userSelect.equals("N")) {break;}
+                            else {userSelect = inputOutput.input("Please select \"Y\" or \"N\" (Y/N): ").toUpperCase();}
+                        }
+                    }
                     if (userInput.get(0).equals("connect")) {
                         ConnectToDataBase doConnect = new ConnectToDataBase(this.dataBase, this.inputOutput);
-                        if (doConnect.isExecutable(userInput)) {doConnect.execute(userInput);}
+                        if (doConnect.isExecutable(userInput)) {
+                            doConnect.execute(userInput);
+                            setPrompt("sqlCmd/" + this.dataBase.getDataBaseName() + "/_> ");
+                        }
                     }
 
                 }else {
@@ -74,7 +94,13 @@ public class CommandInvoker {
                 inputOutput.outputln("Type your command here");
                 userInput = new ArrayList<String>(Arrays.asList(inputOutput.input(prompt).split(" +")));
                 for (Command command: commands) {
-                    if (command.isExecutable(userInput)) {command.execute(userInput);}
+                    if (command.isExecutable(userInput)) {
+                        command.execute(userInput);
+                        if (userInput.get(0).equals("close")) {
+                            setPrompt();
+                            break;
+                        }
+                    }
                 }
 
             }

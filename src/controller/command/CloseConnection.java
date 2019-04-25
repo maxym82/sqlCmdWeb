@@ -17,12 +17,26 @@ public class CloseConnection implements Command {
 
     @Override
     public boolean isExecutable(ArrayList<String> command) {
-        return false;
+        if (command.get(0).equals("close")) {return true;}
+        else return false;
     }
 
     @Override
     public void execute(ArrayList<String> command) {
-        this.dataBase.closeConnection();
+            String userInput = console.input("You are about to close connection to DB, please confirm (Y/N): ").toUpperCase();
+        while (true) {
+            if (userInput.equals("Y")) {
+                if (this.dataBase.closeConnection()) {
+                    console.outputln("Connection to DB \" " + this.dataBase.getDataBaseName() + " \" closed");
+                    return;
+                } else {
+                    console.outputln("Was you really connected to any DB??? somwthing went wrong...");
+                    return;
+                }
+            } else if (userInput.equals("N")) {
+                return;
+            } else {userInput = console.input("Please select only Y or N: ").toUpperCase();}
 
+        }
     }
 }
