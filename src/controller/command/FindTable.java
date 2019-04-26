@@ -34,31 +34,11 @@ public class FindTable implements Command {
         if (!command.get(0).equals("find") || command.size() != 2) {
             console.outputln("Incorrect command format, please type \"help\" for help");
         } else {
-            ResultSet result = dataBase.findTable(command.get(1));
-            ResultSetMetaData rsmd = null;
+
             ArrayList<ArrayList<String>> tableToPrint = new ArrayList<ArrayList<String>>();
-            ArrayList<String> row;
-            ArrayList<String> header = new ArrayList();
-            try {
-                rsmd = result.getMetaData();
-                int columnNumber = rsmd.getColumnCount();
-                for (int i = 1; i <= columnNumber; i++) {
-                    header.add(rsmd.getColumnName(i));
-                }
-                tableToPrint.add(header);
-                while (result.next()) {
-                    row = new ArrayList<>();
-                    for (int i = 1; i <= columnNumber; i++) {
-                        if (result.getString(i) != null) {
-                            row.add(result.getString(i));
-                        }
-                    }
-                    tableToPrint.add(row);
-                }
+                tableToPrint = dataBase.findTable(command.get(1));
+                console.outputln("");
                 console.outputln(tableToPrint);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
 
         }
     }

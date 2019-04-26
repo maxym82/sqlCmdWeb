@@ -17,11 +17,17 @@ public class CreateTable implements Command {
 
     @Override
     public boolean isExecutable(ArrayList<String> command) {
+        if (command.get(0).equals("create")) {return true;}
         return false;
     }
 
     @Override
     public void execute(ArrayList<String> command) {
+        if (command.size() < 2) {
+            console.outputln("Command format is wrong... Pleae type \'help\' for help");
+        } else {
+            dataBase.createTable(command.get(1), new ArrayList<>(command.subList(2, command.size())));
+        }
 
     }
 }

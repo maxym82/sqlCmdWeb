@@ -153,58 +153,15 @@ public class DataBaseOperations implements DataBaseInterface {
 
 
     @Override
-    public boolean createTable() {
-        String[] dataTypes = new String [] {"BOOL", "CHAR", "VARCHAR", "TEXT", "SMALLINT", "INT", "SERIAL", "float", "DATE",
-                "TIME", "TIMESTAMP", "INTERVAL", "UUID", "Array", "JSON", "hstore"};
+    public boolean createTable(String tableName, ArrayList<String> columns) {
         if (this.connection != null) {
-            Scanner userInput = new Scanner(System.in);
-            System.out.println("In order to create table please enter table Name and required fields with their types");
-            System.out.println("Please select type from that list:");
-            for (int i = 0; i < dataTypes.length; i++) {
-                System.out.print(dataTypes[i] + " ");
-            }
-            System.out.println("");
-            System.out.print("Please enter TABLE name: ");
-            String tableName = userInput.nextLine();
-            String statementString = "CREATE TABLE " + tableName + " (";
-            System.out.print("How many columns do you want: ");
-            int columnQtty = userInput.nextInt();
-            userInput.nextLine();
-            System.out.println("Table with " + columnQtty + " columns will be created");
-            String[] columns = new String[columnQtty];
-            String[] columnsTypes = new String[columnQtty];
-            for (int i = 0; i < columnQtty; i++) {
-                System.out.print("Please enter column number " + (i + 1) + " name: ");
-                columns[i] = userInput.nextLine();
-                System.out.println("You entered name: " + columns[i]);
-                statementString += columns[i] + " ";
-                while (true) {
-                    System.out.print("Please enter column number " + (i + 1) + " type: ");
-                    columnsTypes[i] = userInput.nextLine();
-                    if (Arrays.stream(dataTypes).noneMatch(columnsTypes[i]::equals)) {
-                        System.out.println("This type of data is not supported, please re Enter!");
-                    } else if (columnsTypes[i].equals("float")) {
-                        System.out.println("Plese enter floating point: ");
-                        String fp = userInput.nextLine();
-                        columnsTypes[i] += "(" + fp + ")";
-                        if (i != columnQtty-1) {
-                            statementString += columnsTypes[i] + ", ";
-                            break;
-                        } else {
-                            statementString += columnsTypes[i] + ")";
-                            break;
-                        }
-                    }
-                    else {
-                        if (i != columnQtty-1) {
-                        statementString += columnsTypes[i] + ", ";
-                        break;
-                        } else {
-                            statementString += columnsTypes[i] + ")";
-                            break;
-                        }
-                    }
-                }
+            String statementString = "CREATE TABLE public." + tableName + " (";
+            for (int i = 0; i < columns.size() - 1; i++) {
+             if (i != columns.size()-1) {
+                 statementString = statementString + columns.get(i) + ", ";
+             }else {
+                 statementString = statementString + columns.get(i) + ")";
+             }
             }
             try {
                 Statement statement = this.connection.createStatement();
@@ -223,20 +180,38 @@ public class DataBaseOperations implements DataBaseInterface {
     }
 
     @Override
-    public ResultSet findTable(String tableName) {
+    public ArrayList<ArrayList<String>> findTable(String tableName) {
         ResultSet result = null;
+        ArrayList<ArrayList<String>> resultTable = new ArrayList<ArrayList<String>>();
+        ResultSetMetaData rsmd;
         if (connection != null) {
             try {
                 Statement statement = connection.createStatement();
                 result = statement.executeQuery("SELECT  * from " + tableName);
-                ResultSetMetaData rsmd = result.getMetaData();
-                if (rsmd.getColumnCount() == 0) {throw new SQLException("Table \" " + tableName + " \" does not exist");}
+                rsmd = result.getMetaData();
+                int columnNumber = rsmd.getColumnCount();
+                if (columnNumber == 0) {throw new SQLException("Table \" " + tableName + " \" does not exist");}
+                ArrayList<String> row;
+                ArrayList<String> header = new ArrayList();
+                for (int i = 1; i <= columnNumber; i++) {
+                    header.add(rsmd.getColumnName(i));
+                }
+                resultTable.add(header);
+                while (result.next()) {
+                    row = new ArrayList<>();
+                    for (int i = 1; i <= columnNumber; i++) {
+                        if (result.getString(i) != null) {
+                            row.add(result.getString(i));
+                        }
+                    }
+                    resultTable.add(row);
+                }
 
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
-        return result;
+        return resultTable;
     }
 
     @Override
