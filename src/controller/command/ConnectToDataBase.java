@@ -4,6 +4,7 @@ import controller.Command;
 import dataBase.DataBaseInterface;
 import view.InputOutput;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class ConnectToDataBase implements Command {
@@ -29,12 +30,15 @@ public class ConnectToDataBase implements Command {
     @Override
     public void execute(ArrayList<String> command) {
         this.setPassword();
-        dataBase.connectToDataBase(command.get(1), command.get(2), userPassword);
-        if (dataBase.isConnected()) {
-            console.outputln("You hafe connected to DB:" + command.get(1));
-        }
-        else {
-            console.outputln("Semething went wrong, please check DB name, and user credentials");
+        try {
+            dataBase.connectToDataBase(command.get(1), command.get(2), userPassword);
+            if (dataBase.isConnected()) {
+                console.outputln("You hafe connected to DB:" + command.get(1));
+            } else {
+                console.outputln("Semething went wrong, please check DB name, and user credentials");
+            }
+        } catch (Exception e) {
+            console.outputln(e.getMessage());
         }
 
     }

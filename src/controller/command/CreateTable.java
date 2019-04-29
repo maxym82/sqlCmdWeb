@@ -4,6 +4,7 @@ import controller.Command;
 import dataBase.DataBaseInterface;
 import view.View;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class CreateTable implements Command {
@@ -26,7 +27,13 @@ public class CreateTable implements Command {
         if (command.size() < 2) {
             console.outputln("Command format is wrong... Pleae type \'help\' for help");
         } else {
-            dataBase.createTable(command.get(1), new ArrayList<>(command.subList(2, command.size())));
+            try {
+                if (dataBase.createTable(command.get(1), new ArrayList<>(command.subList(2, command.size())))) {
+                    console.outputln("DB \"" + command.get(1) + "\" has been created");
+                }
+            } catch (Exception e) {
+                console.outputln(e.toString());
+            }
         }
 
     }

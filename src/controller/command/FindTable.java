@@ -34,11 +34,15 @@ public class FindTable implements Command {
         if (!command.get(0).equals("find") || command.size() != 2) {
             console.outputln("Incorrect command format, please type \"help\" for help");
         } else {
+            try {
 
-            ArrayList<ArrayList<String>> tableToPrint = new ArrayList<ArrayList<String>>();
+                ArrayList<ArrayList<String>> tableToPrint = new ArrayList<ArrayList<String>>();
                 tableToPrint = dataBase.findTable(command.get(1));
                 console.outputln("");
                 console.outputln(tableToPrint);
+            } catch (Exception e) {
+                console.outputln(e.getMessage());
+            }
 
         }
     }

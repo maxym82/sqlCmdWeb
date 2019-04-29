@@ -4,6 +4,7 @@ import controller.Command;
 import dataBase.DataBaseInterface;
 import view.View;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class listTables implements Command {
@@ -30,17 +31,21 @@ public class listTables implements Command {
         } else {
             int counter = 1;
             console.outputln(String.format("On Data Base \" %s \" you can find this tables available: ", this.dataBase.getDataBaseName()));
-            if (dataBase.listTables().size() == 0) {
-                console.outputln("No table available. DB is empty");
-            } else {
-                for (String tableName : dataBase.listTables()) {
-                    console.outputln("+" + "-".repeat(tableName.length() + 11) + "+");
-                    console.output("| " + counter++ + " |");
-                    console.outputln("    " + tableName + "   |");
-                    console.outputln("+" + "-".repeat(tableName.length() + 11) + "+");
+            try {
+                if (dataBase.listTables().size() == 0) {
+                    console.outputln("No table available. DB is empty");
+                } else {
+                    for (String tableName : dataBase.listTables()) {
+                        console.outputln("+" + "-".repeat(tableName.length() + 11) + "+");
+                        console.output("| " + counter++ + " |");
+                        console.outputln("    " + tableName + "   |");
+                        console.outputln("+" + "-".repeat(tableName.length() + 11) + "+");
+                    }
                 }
-            }
 
+            } catch (SQLException e) {
+                console.outputln(e.getMessage());
+            }
         }
     }
 }

@@ -80,7 +80,7 @@ public class CommandInvoker {
                         ConnectToDataBase doConnect = new ConnectToDataBase(this.dataBase, this.inputOutput);
                         if (doConnect.isExecutable(userInput)) {
                             doConnect.execute(userInput);
-                            setPrompt("sqlCmd/" + this.dataBase.getDataBaseName() + "/_> ");
+                            if (this.dataBase.isConnected()) {setPrompt("sqlCmd/" + this.dataBase.getDataBaseName() + "/_> ");}
                         }
                     }
 

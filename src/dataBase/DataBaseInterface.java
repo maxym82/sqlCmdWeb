@@ -1,40 +1,41 @@
 package dataBase;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public interface DataBaseInterface {
 
-    boolean isDBexist(String dbName);
+    boolean isDBexist(String dbName) throws SQLException;
 
     String getDataBaseName();
 
-    boolean createDB();
+    boolean createDB() throws SQLException;
 
-    boolean connectToDataBase(String dataBaseName, String username, String password);
+    boolean connectToDataBase(String dataBaseName, String username, String password) throws SQLException;
 
-    List<String> listTables();
+    List<String> listTables() throws SQLException;
 
-    boolean clearTable(String tableName);
+    boolean clearTable(String tableName) throws SQLException;
 
-    boolean dropTable();
+    boolean dropTable(String tableName) throws SQLException;
 
     boolean isConnected ();
 
 
-    boolean createTable(String tableName, ArrayList<String> columns);
+    boolean createTable(String tableName, ArrayList<String> columns) throws SQLException;
 
-    ArrayList<ArrayList<String>> findTable(String tableName);
+    ArrayList<ArrayList<String>> findTable(String tableName) throws SQLException;
 
-    boolean insertROW();
+    boolean insertROW() throws SQLException;
 
-    boolean updateValue();
+    boolean updateValue() throws SQLException;
 
-    boolean deleteValue();
+    boolean deleteValue() throws SQLException;
 
-    void help();
+    void help() throws SQLException;
 
-    boolean closeConnection();
+    boolean closeConnection() throws SQLException;
 
 }
