@@ -28,11 +28,11 @@ public interface DataBaseInterface {
 
     ArrayList<ArrayList<String>> findTable(String tableName) throws SQLException;
 
-    boolean insertROW() throws SQLException;
+    boolean insertROW(String tableName, ArrayList<String> columns) throws SQLException;
 
     boolean updateValue() throws SQLException;
 
-    boolean deleteValue() throws SQLException;
+    ArrayList<ArrayList<String>> deleteValue(ArrayList command) throws SQLException;
 
     void help() throws SQLException;
 

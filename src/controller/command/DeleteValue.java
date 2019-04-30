@@ -18,11 +18,26 @@ public class DeleteValue implements Command {
 
     @Override
     public boolean isExecutable(ArrayList<String> command) {
+        if (command.get(0).equals("delete")) {return true;}
         return false;
     }
 
     @Override
     public void execute(ArrayList<String> command) {
+        ArrayList rowToDelete = new ArrayList();
+        if (command.size() != 4) {
+            console.outputln("Incorrect command format, please type \"help\" for help");
+        }else {
+            try {
+                if (dataBase.deleteValue(command)) {
+
+                }
+
+            } catch (Exception e) {
+                console.outputln("Something went wrong \n" + e.toString());
+            }
+
+        }
 
     }
 }
