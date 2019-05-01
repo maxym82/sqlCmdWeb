@@ -2,15 +2,15 @@ package controller.command;
 
 import controller.Command;
 import dataBase.DataBaseInterface;
-import view.View;
+import view.InputOutput;
 
 import java.util.ArrayList;
 
 public class DeleteValue implements Command {
     private DataBaseInterface dataBase;
-    private View console;
+    private InputOutput console;
 
-    public DeleteValue (DataBaseInterface dataBase, View console) {
+    public DeleteValue (DataBaseInterface dataBase, InputOutput console) {
         this.dataBase = dataBase;
         this.console = console;
     }
@@ -25,12 +25,20 @@ public class DeleteValue implements Command {
     @Override
     public void execute(ArrayList<String> command) {
         ArrayList rowToDelete = new ArrayList();
-        if (command.size() != 4) {
+        ArrayList<ArrayList<String>> tableToPrint = new ArrayList<ArrayList<String>>();
+        if (command.size() != 3) {
             console.outputln("Incorrect command format, please type \"help\" for help");
         }else {
             try {
-                if (dataBase.deleteValue(command)) {
-
+                console.outputln("You are about to delete row that contains Value " +
+                        command.get(2).split("\\|")[0] + " = " + command.get(2).split("\\|")[1]);
+                String userInput = console.input("Plese confirm (Y/N): ").toUpperCase();
+                if (userInput.equals("Y")) {
+                    tableToPrint = dataBase.deleteValue(command);
+                    console.outputln("Following row was deleted fron the table \"" +
+                            command.get(1) + ":");
+                    console.outputln("");
+                    console.outputln(tableToPrint);
                 }
 
             } catch (Exception e) {

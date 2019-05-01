@@ -1,6 +1,5 @@
 package dataBase;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,13 +25,13 @@ public interface DataBaseInterface {
 
     boolean createTable(String tableName, ArrayList<String> columns) throws SQLException;
 
-    ArrayList<ArrayList<String>> findTable(String tableName) throws SQLException;
+    ArrayList<ArrayList<String>> findTable(String tableName, String condition) throws SQLException;
 
     boolean insertROW(String tableName, ArrayList<String> columns) throws SQLException;
 
     boolean updateValue() throws SQLException;
 
-    ArrayList<ArrayList<String>> deleteValue(ArrayList command) throws SQLException;
+    ArrayList<ArrayList<String>> deleteValue(ArrayList<String> command) throws SQLException;
 
     void help() throws SQLException;
 

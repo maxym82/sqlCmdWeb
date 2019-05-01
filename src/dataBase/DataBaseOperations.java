@@ -4,7 +4,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
 
 public class DataBaseOperations implements DataBaseInterface {
     private String dataBaseName;
@@ -90,6 +89,7 @@ public class DataBaseOperations implements DataBaseInterface {
                 while (rs.next()) {
                     listOfTables.add(rs.getString(3));
                 }
+                if (rs != null) {rs.close();}
             } catch (SQLException e) {
                 throw new SQLException(e);
             }
@@ -179,14 +179,14 @@ public class DataBaseOperations implements DataBaseInterface {
     }
 
     @Override
-    public ArrayList<ArrayList<String>> findTable(String tableName) throws SQLException {
+    public ArrayList<ArrayList<String>> findTable(String tableName, String condition) throws SQLException {
         ResultSet result = null;
         ArrayList<ArrayList<String>> resultTable = new ArrayList<ArrayList<String>>();
         ResultSetMetaData rsmd;
         if (connection != null) {
             try {
                 Statement statement = connection.createStatement();
-                result = statement.executeQuery("SELECT  * from " + tableName);
+                result = statement.executeQuery("SELECT  * from " + tableName + condition);
                 rsmd = result.getMetaData();
                 int columnNumber = rsmd.getColumnCount();
                 if (columnNumber == 0) {
@@ -207,6 +207,8 @@ public class DataBaseOperations implements DataBaseInterface {
                     }
                     resultTable.add(row);
                 }
+                statement.close();
+                result.close();
 
             } catch (SQLException e) {
                 throw new SQLException(e);
@@ -246,6 +248,7 @@ public class DataBaseOperations implements DataBaseInterface {
                 System.out.println(statementString);
                 statement.execute(statementString);
                 statement.close();
+                tables.close();
                 return true;
 
             } catch (Exception e) {
@@ -264,11 +267,21 @@ public class DataBaseOperations implements DataBaseInterface {
     }
 
     @Override
-    public ArrayList<ArrayList<String>> deleteValue(ArrayList command) throws SQLException{
+    public ArrayList<ArrayList<String>> deleteValue(ArrayList<String> command) throws SQLException{
         ArrayList<ArrayList<String>> rowToPrint = new ArrayList<ArrayList<String>>();
+        if (connection != null) {
+            try {
+                String condition = " WHERE " + command.get(2).split("\\|")[0] + " = " + command.get(2).split("\\|")[1];
+                rowToPrint = this.findTable(command.get(1), condition);
 
-        
-
+                Statement statement = this.connection.createStatement();
+                statement.executeUpdate("DELETE from " + command.get(1) + " WHERE " +
+                        command.get(2).split("\\|")[0] + " = " + command.get(2).split("\\|")[1]);
+                statement.close();
+            }catch (Exception e) {
+                throw new SQLException(e.getMessage());
+            }
+        }
         return rowToPrint;
     }
 

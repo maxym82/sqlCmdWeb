@@ -3,13 +3,8 @@ package controller.command;
 import controller.Command;
 import dataBase.DataBaseInterface;
 import view.InputOutput;
-import view.View;
 
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class FindTable implements Command {
     private DataBaseInterface dataBase;
@@ -37,7 +32,7 @@ public class FindTable implements Command {
             try {
 
                 ArrayList<ArrayList<String>> tableToPrint = new ArrayList<ArrayList<String>>();
-                tableToPrint = dataBase.findTable(command.get(1));
+                tableToPrint = dataBase.findTable(command.get(1), "");
                 console.outputln("");
                 console.outputln(tableToPrint);
             } catch (Exception e) {
