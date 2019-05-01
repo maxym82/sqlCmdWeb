@@ -29,7 +29,7 @@ public interface DataBaseInterface {
 
     boolean insertROW(String tableName, ArrayList<String> columns) throws SQLException;
 
-    boolean updateValue() throws SQLException;
+    ArrayList<ArrayList<String>> updateValue(String tableName, String condition, String newValue) throws SQLException;
 
     ArrayList<ArrayList<String>> deleteValue(ArrayList<String> command) throws SQLException;
 

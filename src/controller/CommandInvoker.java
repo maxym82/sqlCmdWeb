@@ -47,7 +47,7 @@ public class CommandInvoker {
         commands.add(new DropTable(this.dataBase, this.inputOutput));
         commands.add(new FindTable(this.dataBase, this.inputOutput));
         commands.add(new GetDataBaseName(this.dataBase, this.inputOutput));
-        commands.add(new Help());
+        commands.add(new Help(this.inputOutput));
         commands.add(new InsertRow(this.dataBase, this.inputOutput));
         commands.add(new listTables(this.dataBase, this.inputOutput));
         commands.add(new UpdateValue(this.dataBase, this.inputOutput));
@@ -64,7 +64,13 @@ public class CommandInvoker {
                 inputOutput.outputln("Type your commend here");
                 userInput = new ArrayList<String>(Arrays.asList(inputOutput.input(prompt).split(" +")));
                 if (Arrays.stream(commandsWhenNotConnected).anyMatch(userInput.get(0)::equals)) {
-                    if (userInput.get(0).equals("help")) {}
+                    if (userInput.get(0).equals("help")) {
+                        inputOutput.outputln("On unconnected mode you can use following commands:");
+                        inputOutput.outputln("1. help. For help");
+                        inputOutput.outputln("2. connect. To connect to database");
+                        inputOutput.outputln("      Format: connect [database_name]");
+                        inputOutput.outputln("3. exit. To exit from the programm");
+                    }
                     if (userInput.get(0).equals("exit")) {
                         String userSelect = inputOutput.input("You are about to close the progran, please confirm (Y/N): ").toUpperCase();
                         while (true) {

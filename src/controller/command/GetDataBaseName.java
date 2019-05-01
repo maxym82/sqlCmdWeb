@@ -17,11 +17,13 @@ public class GetDataBaseName implements Command {
 
     @Override
     public boolean isExecutable(ArrayList<String> command) {
+        if (command.get(0).equals("pwd")) {return true;}
         return false;
     }
 
     @Override
     public void execute(ArrayList<String> command) {
+        console.outputln(this.dataBase.getDataBaseName());
 
     }
 }

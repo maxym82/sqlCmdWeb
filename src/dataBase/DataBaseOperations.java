@@ -245,7 +245,7 @@ public class DataBaseOperations implements DataBaseInterface {
                 }
             try {
                 Statement statement = this.connection.createStatement();
-                System.out.println(statementString);
+                //System.out.println(statementString);
                 statement.execute(statementString);
                 statement.close();
                 tables.close();
@@ -261,9 +261,21 @@ public class DataBaseOperations implements DataBaseInterface {
     }
 
     @Override
-    public boolean updateValue() throws SQLException{
-//        todo: this is to update the vatue
-        return true;
+    public ArrayList<ArrayList<String>> updateValue(String tableName, String condition, String newValues) throws SQLException{
+        ArrayList<ArrayList<String>> updatedRow = new ArrayList<ArrayList<String>>();
+        String statementString = "UPDATE " + tableName + " SET " + newValues.split("\\|")[0] + " = " +
+                newValues.split("\\|")[1] + condition;
+        if (connection != null) {
+            try {
+                Statement statement = this.connection.createStatement();
+                statement.executeUpdate(statementString);
+                String newCondition = " WHERE " + newValues.split("\\|")[0] + " = " + newValues.split("\\|")[1];
+                updatedRow = this.findTable(tableName, newCondition);
+            }catch (SQLException e) {
+                throw new SQLException(e.getMessage());
+            }
+        }
+        return updatedRow;
     }
 
     @Override
