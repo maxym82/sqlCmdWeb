@@ -74,7 +74,7 @@ public class CommandInvoker {
                     if (userInput.get(0).equals("exit")) {
                         String userSelect = inputOutput.input("You are about to close the progran, please confirm (Y/N): ").toUpperCase();
                         while (true) {
-//                        todo: check if i need to close any connection. should not be a problem, we did chec it on a condition above
+//                        todo: check if i need to close any connection. should not be a problem, we did check it on a condition above
                             if (userSelect.equals("Y")){
                                 inputOutput.outputln("Programm saccessfully closed");
                                 break loop;
@@ -96,11 +96,13 @@ public class CommandInvoker {
 
             }
             else {
+                boolean executed = false;
                 inputOutput.outputln("You are on connected mode");
                 inputOutput.outputln("Type your command here");
                 userInput = new ArrayList<String>(Arrays.asList(inputOutput.input(prompt).split(" +")));
                 for (Command command: commands) {
                     if (command.isExecutable(userInput)) {
+                        executed = true;
                         command.execute(userInput);
                         if (userInput.get(0).equals("close")) {
                             setPrompt();
@@ -108,6 +110,7 @@ public class CommandInvoker {
                         }
                     }
                 }
+                if (!executed) {inputOutput.outputln("This command is not supported, please type help for \"help\"");}
 
             }
 
