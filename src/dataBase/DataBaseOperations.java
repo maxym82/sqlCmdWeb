@@ -181,12 +181,16 @@ public class DataBaseOperations implements DataBaseInterface {
     @Override
     public ArrayList<ArrayList<String>> findTable(String tableName, String condition) throws SQLException {
         ResultSet result = null;
+        String newCondition;
         ArrayList<ArrayList<String>> resultTable = new ArrayList<ArrayList<String>>();
         ResultSetMetaData rsmd;
         if (connection != null) {
+            if (!(condition == null || condition.equals(""))) {
+                newCondition = " WHERE " + condition.split("\\|")[0] + " = " + condition.split("\\|")[1];
+            } else {newCondition = "";}
             try {
                 Statement statement = connection.createStatement();
-                result = statement.executeQuery("SELECT  * from " + tableName + condition);
+                result = statement.executeQuery("SELECT  * from " + tableName + newCondition);
                 rsmd = result.getMetaData();
                 int columnNumber = rsmd.getColumnCount();
                 if (columnNumber == 0) {
@@ -264,7 +268,7 @@ public class DataBaseOperations implements DataBaseInterface {
     public ArrayList<ArrayList<String>> updateValue(String tableName, String condition, String newValues) throws SQLException{
         ArrayList<ArrayList<String>> updatedRow = new ArrayList<ArrayList<String>>();
         String statementString = "UPDATE " + tableName + " SET " + newValues.split("\\|")[0] + " = " +
-                newValues.split("\\|")[1] + condition;
+                newValues.split("\\|")[1] + " WHERE " + condition.split("\\|")[0] + " = " + condition.split("\\|")[1];
         if (connection != null) {
             try {
                 Statement statement = this.connection.createStatement();

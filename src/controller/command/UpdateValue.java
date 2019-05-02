@@ -29,11 +29,10 @@ public class UpdateValue implements Command {
             console.outputln("Command format is wrong... Pleae type \'help\' for help");
         } else {
             try {
-                String condition = " WHERE " + command.get(2).split("\\|")[0] + " = " + command.get(2).split("\\|")[1];
-                ArrayList<ArrayList<String>> rowToDelete = dataBase.findTable(command.get(1), condition);
+                ArrayList<ArrayList<String>> rowToDelete = dataBase.findTable(command.get(1), command.get(2));
                 console.outputln("Following row will be modified:");
                 console.outputln(rowToDelete);
-                ArrayList<ArrayList<String>> newValues = dataBase.updateValue(command.get(1), condition, command.get(3));
+                ArrayList<ArrayList<String>> newValues = dataBase.updateValue(command.get(1), command.get(2), command.get(3));
                 console.outputln("New row:");
                 console.outputln(newValues);
 
