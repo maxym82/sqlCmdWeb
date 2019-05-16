@@ -4,7 +4,6 @@ import controller.Command;
 import dataBase.DataBaseInterface;
 import view.InputOutput;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class ConnectToDataBase implements Command {

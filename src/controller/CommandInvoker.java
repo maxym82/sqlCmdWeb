@@ -69,14 +69,14 @@ public class CommandInvoker {
                         inputOutput.outputln("1. help. For help");
                         inputOutput.outputln("2. connect. To connect to database");
                         inputOutput.outputln("      Format: connect [database_name]");
-                        inputOutput.outputln("3. exit. To exit from the programm");
+                        inputOutput.outputln("3. exit. To exit from the program");
                     }
                     if (userInput.get(0).equals("exit")) {
                         String userSelect = inputOutput.input("You are about to close the progran, please confirm (Y/N): ").toUpperCase();
                         while (true) {
 //                        todo: check if i need to close any connection. should not be a problem, we did check it on a condition above
                             if (userSelect.equals("Y")){
-                                inputOutput.outputln("Programm saccessfully closed");
+                                inputOutput.outputln("Programm successfully closed");
                                 break loop;
                             }else if (userSelect.equals("N")) {break;}
                             else {userSelect = inputOutput.input("Please select \"Y\" or \"N\" (Y/N): ").toUpperCase();}

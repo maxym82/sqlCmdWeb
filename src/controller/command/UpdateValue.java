@@ -3,7 +3,6 @@ package controller.command;
 import controller.Command;
 import dataBase.DataBaseInterface;
 import view.InputOutput;
-import view.View;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -29,9 +28,8 @@ public class UpdateValue implements Command {
             console.outputln("Command format is wrong... Pleae type \'help\' for help");
         } else {
             try {
-                ArrayList<ArrayList<String>> rowToDelete = dataBase.findTable(command.get(1), command.get(2));
                 console.outputln("Following row will be modified:");
-                console.outputln(rowToDelete);
+                console.outputln(dataBase.findTable(command.get(1), command.get(2)));
                 ArrayList<ArrayList<String>> newValues = dataBase.updateValue(command.get(1), command.get(2), command.get(3));
                 console.outputln("New row:");
                 console.outputln(newValues);
