@@ -1,7 +1,7 @@
 package controller.command;
 
-import controller.Command;
 import dataBase.DataBaseInterface;
+import controller.Command;
 import view.View;
 
 import java.sql.SQLException;

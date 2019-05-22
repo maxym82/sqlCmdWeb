@@ -6,7 +6,7 @@ import dataBase.DataBaseInterface;
 import dataBase.DataBaseOperations;
 import view.InputOutput;
 
-import java.sql.*;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

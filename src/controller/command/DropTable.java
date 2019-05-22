@@ -1,10 +1,9 @@
 package controller.command;
 
-import controller.Command;
 import dataBase.DataBaseInterface;
+import controller.Command;
 import view.View;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class DropTable implements Command {
