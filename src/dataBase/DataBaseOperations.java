@@ -1,7 +1,5 @@
 package dataBase;
 
-import dataBase.DataBaseInterface;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -199,7 +197,7 @@ public class DataBaseOperations implements DataBaseInterface {
                     throw new SQLException("Table \" " + tableName + " \" does not exist");
                 }
                 ArrayList<String> row;
-                ArrayList<String> header = new ArrayList();
+                ArrayList<String> header = new ArrayList<String>();
                 for (int i = 1; i <= columnNumber; i++) {
                     header.add(rsmd.getColumnName(i));
                 }
@@ -301,11 +299,6 @@ public class DataBaseOperations implements DataBaseInterface {
             }
         }
         return rowToPrint;
-    }
-
-    @Override
-    public void help() {
-
     }
 
     @Override

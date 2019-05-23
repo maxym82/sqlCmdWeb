@@ -31,8 +31,7 @@ public class FindTable implements Command {
         } else {
             try {
 
-                ArrayList<ArrayList<String>> tableToPrint = new ArrayList<ArrayList<String>>();
-                tableToPrint = dataBase.findTable(command.get(1), "");
+                ArrayList<ArrayList<String>> tableToPrint = dataBase.findTable(command.get(1), "");
                 console.outputln("");
                 console.outputln(tableToPrint);
             } catch (Exception e) {

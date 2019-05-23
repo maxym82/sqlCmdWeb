@@ -4,11 +4,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
 
 public class DataBaseOperationsTest {
     private DataBaseOperations operations;
@@ -16,14 +13,11 @@ public class DataBaseOperationsTest {
     @Before
     public void setup() throws SQLException {
         operations = new DataBaseOperations();
-        operations.connectToDataBase("tracklist", "maksym", "password");
+        operations.connectToDataBase("maksym", "maksym", "password");
     }
 
     @Test
     public void isDBexistTest() throws SQLException {
-        String[] tableNames = operations.listTables().toArray(new String[0]);
-        assertArrayEquals(new String[] {"album", "songs"}, tableNames);
-
     }
 
     @Test
@@ -39,7 +33,9 @@ public class DataBaseOperationsTest {
     }
 
     @Test
-    public void listTablesTest() {
+    public void listTablesTest() throws SQLException {
+        String[] tableNames = operations.listTables().toArray(new String[0]);
+        assertArrayEquals(new String[] {"albums", "songs"}, tableNames);
     }
 
     @Test
@@ -72,10 +68,6 @@ public class DataBaseOperationsTest {
 
     @Test
     public void deleteValueTest() {
-    }
-
-    @Test
-    public void helpTest() {
     }
 
     @Test

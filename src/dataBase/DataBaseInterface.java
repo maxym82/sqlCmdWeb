@@ -22,7 +22,6 @@ public interface DataBaseInterface {
 
     boolean isConnected ();
 
-
     boolean createTable(String tableName, ArrayList<String> columns) throws SQLException;
 
     ArrayList<ArrayList<String>> findTable(String tableName, String condition) throws SQLException;
@@ -32,8 +31,6 @@ public interface DataBaseInterface {
     ArrayList<ArrayList<String>> updateValue(String tableName, String condition, String newValue) throws SQLException;
 
     ArrayList<ArrayList<String>> deleteValue(ArrayList<String> command) throws SQLException;
-
-    void help() throws SQLException;
 
     boolean closeConnection() throws SQLException;
 
