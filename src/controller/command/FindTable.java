@@ -2,16 +2,17 @@ package controller.command;
 
 import dataBase.DataBaseInterface;
 import controller.Command;
+import dataBase.DataBaseOperations;
 import view.InputOutput;
 
 import java.util.ArrayList;
 
 public class FindTable implements Command {
-    private DataBaseInterface dataBase;
+    private DataBaseOperations dataBase;
     private InputOutput console;
     private String tableName;
 
-    public FindTable (DataBaseInterface dataBase, InputOutput console) {
+    public FindTable (DataBaseOperations dataBase, InputOutput console) {
         this.console = console;
         this.dataBase = dataBase;
     }
@@ -31,7 +32,7 @@ public class FindTable implements Command {
         } else {
             try {
 
-                ArrayList<ArrayList<String>> tableToPrint = dataBase.findTable(command.get(1), "");
+                ArrayList<ArrayList<String>> tableToPrint = dataBase.findTable(command.get(1));
                 console.outputln("");
                 console.outputln(tableToPrint);
             } catch (Exception e) {

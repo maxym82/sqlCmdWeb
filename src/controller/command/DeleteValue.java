@@ -30,11 +30,12 @@ public class DeleteValue implements Command {
             console.outputln("Incorrect command format, please type \"help\" for help");
         }else {
             try {
-                console.outputln("You are about to delete row that contains Value " +
-                        command.get(2).split("\\|")[0] + " = " + command.get(2).split("\\|")[1]);
+                //delete table1 column1|'any_text'
+                String lookupValues = command.get(2).split("\\|")[0] + " = " + command.get(2).split("\\|")[1];
+                console.outputln("You are about to delete row that contains Value " + lookupValues);
                 String userInput = console.input("Plese confirm (Y/N): ").toUpperCase();
                 if (userInput.equals("Y")) {
-                    tableToPrint = dataBase.deleteValue(command);
+                    tableToPrint = dataBase.deleteValue(command.get(1), lookupValues);
                     console.outputln("Following row was deleted fron the table \"" +
                             command.get(1) + ":");
                     console.outputln("");

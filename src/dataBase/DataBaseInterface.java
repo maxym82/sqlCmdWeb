@@ -3,6 +3,7 @@ package dataBase;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public interface DataBaseInterface {
 
@@ -30,7 +31,7 @@ public interface DataBaseInterface {
 
     ArrayList<ArrayList<String>> updateValue(String tableName, String condition, String newValue) throws SQLException;
 
-    ArrayList<ArrayList<String>> deleteValue(ArrayList<String> command) throws SQLException;
+    ArrayList<ArrayList<String>> deleteValue(String tableName, String lookupValues) throws SQLException;
 
     boolean closeConnection() throws SQLException;
 

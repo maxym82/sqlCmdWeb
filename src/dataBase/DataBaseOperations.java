@@ -4,6 +4,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class DataBaseOperations implements DataBaseInterface {
     private String dataBaseName;
@@ -178,6 +179,16 @@ public class DataBaseOperations implements DataBaseInterface {
         }
     }
 
+    private String getColumnNames (Map data) {
+        String columnName = "";
+        return columnName;
+    }
+
+    public ArrayList<ArrayList<String>> findTable(String tableName) throws SQLException {
+        return findTable(tableName, null);
+    }
+
+
     @Override
     public ArrayList<ArrayList<String>> findTable(String tableName, String condition) throws SQLException {
         ResultSet result = null;
@@ -186,7 +197,7 @@ public class DataBaseOperations implements DataBaseInterface {
         ResultSetMetaData rsmd;
         if (connection != null) {
             if (!(condition == null || condition.equals(""))) {
-                newCondition = " WHERE " + condition.split("\\|")[0] + " = " + condition.split("\\|")[1];
+                newCondition = " WHERE " + condition;
             } else {newCondition = "";}
             try {
                 Statement statement = connection.createStatement();
@@ -265,16 +276,14 @@ public class DataBaseOperations implements DataBaseInterface {
     }
 
     @Override
-    public ArrayList<ArrayList<String>> updateValue(String tableName, String condition, String newValues) throws SQLException{
+    public ArrayList<ArrayList<String>> updateValue(String tableName, String lookupValues, String newValues) throws SQLException{
         ArrayList<ArrayList<String>> updatedRow = new ArrayList<ArrayList<String>>();
-        String statementString = "UPDATE " + tableName + " SET " + newValues.split("\\|")[0] + " = " +
-                newValues.split("\\|")[1] + " WHERE " + condition.split("\\|")[0] + " = " + condition.split("\\|")[1];
+        String statementString = "UPDATE " + tableName + " SET " + newValues + " WHERE " + lookupValues;
         if (connection != null) {
             try {
                 Statement statement = this.connection.createStatement();
                 statement.executeUpdate(statementString);
-                String newCondition = " WHERE " + newValues.split("\\|")[0] + " = " + newValues.split("\\|")[1];
-                updatedRow = this.findTable(tableName, newCondition);
+                updatedRow = this.findTable(tableName, newValues);
             }catch (SQLException e) {
                 throw new SQLException(e.getMessage());
             }
@@ -283,16 +292,14 @@ public class DataBaseOperations implements DataBaseInterface {
     }
 
     @Override
-    public ArrayList<ArrayList<String>> deleteValue(ArrayList<String> command) throws SQLException{
+    public ArrayList<ArrayList<String>> deleteValue(String tableName, String lookupValues) throws SQLException{
         ArrayList<ArrayList<String>> rowToPrint = new ArrayList<ArrayList<String>>();
         if (connection != null) {
             try {
-                String condition = " WHERE " + command.get(2).split("\\|")[0] + " = " + command.get(2).split("\\|")[1];
-                rowToPrint = this.findTable(command.get(1), condition);
+                rowToPrint = this.findTable(tableName, lookupValues);
 
                 Statement statement = this.connection.createStatement();
-                statement.executeUpdate("DELETE from " + command.get(1) + " WHERE " +
-                        command.get(2).split("\\|")[0] + " = " + command.get(2).split("\\|")[1]);
+                statement.executeUpdate("DELETE from " + tableName + " WHERE " + lookupValues);
                 statement.close();
             }catch (Exception e) {
                 throw new SQLException(e.getMessage());
