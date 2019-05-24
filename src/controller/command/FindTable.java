@@ -12,9 +12,11 @@ public class FindTable implements Command {
     private InputOutput console;
     private String tableName;
 
-    public FindTable (DataBaseOperations dataBase, InputOutput console) {
+    public FindTable (DataBaseInterface dataBase, InputOutput console) {
         this.console = console;
-        this.dataBase = dataBase;
+        if (dataBase instanceof DataBaseOperations) {
+            this.dataBase = (DataBaseOperations) dataBase;
+        }
     }
 
     @Override
