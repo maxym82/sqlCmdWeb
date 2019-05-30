@@ -162,7 +162,7 @@ public class DataBaseOperations implements DataBaseInterface {
                 }
             }
             statementString = statementString.substring(0, statementString.length() - 2) + ")";
-            System.out.println(statementString);
+            //System.out.println(statementString);
             try {
                 Statement statement = this.connection.createStatement();
 //                System.out.println(statementString);

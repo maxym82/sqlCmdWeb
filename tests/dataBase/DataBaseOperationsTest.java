@@ -5,23 +5,50 @@ import org.junit.Test;
 
 import java.sql.SQLException;
 
+import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertTrue;
 
 public class DataBaseOperationsTest {
     private DataBaseOperations operations;
+    private String tableName = "tracks";
+    private DataSetInterface newTable = new DataSet();
 
     @Before
     public void setup() throws SQLException {
         operations = new DataBaseOperations();
-        operations.connectToDataBase("maksym", "maksym", "password");
+        operations.connectToDataBase("tracklist", "maksym", "password");
+        newTable.put("track_name", "text");
+        newTable.put("track_id", "int");
+
+    }
+
+    private void createTableWithValues() throws SQLException {
+        DataSetInterface newTable = new DataSet();
+        DataSetInterface row1 = new DataSet();
+        DataSetInterface row2 = new DataSet();
+        row1.put("track_name", "'track_1'");
+        row1.put("track_id", 1);
+        row2.put("track_name", "'track_2'");
+        row2.put("track_id", 2);
+        operations.createTable(this.tableName, this.newTable);
+        operations.insertROW(this.tableName, row1);
+        operations.insertROW(this.tableName, row2);
+
     }
 
     @Test
     public void isDBexistTest() throws SQLException {
+        String dbExist = "tracklist";
+        String dbDoesNotExist = "AnyDB";
+        assertEquals(true, operations.isDBexist(dbExist));
+        assertEquals(false, operations.isDBexist(dbDoesNotExist));
     }
 
     @Test
     public void getDataBaseNameTest() {
+        assertEquals("tracklist", operations.getDataBaseName());
+
     }
 
     @Test
@@ -30,47 +57,76 @@ public class DataBaseOperationsTest {
 
     @Test
     public void connectToDataBaseTest() {
+        assertTrue(operations.isConnected());
     }
 
     @Test
     public void listTablesTest() throws SQLException {
         String[] tableNames = operations.listTables().toArray(new String[0]);
-        assertArrayEquals(new String[] {"albums", "songs"}, tableNames);
+        assertArrayEquals(new String[] {"album", "artists", "songs"}, tableNames);
     }
 
     @Test
-    public void clearTableTest() {
+    public void clearTableTest() throws SQLException {
+        this.createTableWithValues();
+        assertTrue(operations.clearTable(this.tableName));
+        operations.dropTable(this.tableName);
     }
 
     @Test
-    public void dropTableTest() {
+    public void dropTableTest() throws SQLException {
+        operations.createTable(this.tableName, this.newTable);
+        assertTrue(operations.dropTable(this.tableName));
     }
 
     @Test
     public void isConnectedTest() {
+        assertTrue(operations.isConnected());
     }
 
     @Test
-    public void createTableTest() {
+    public void createTableTest() throws SQLException {
+        assertTrue(operations.createTable(this.tableName, this.newTable));
+        operations.dropTable(this.tableName);
     }
 
     @Test
-    public void findTableTest() {
+    public void findTableTest() throws SQLException {
+        this.createTableWithValues();
+        assertEquals("[[track_name, track_id], [track_1, 1], [track_2, 2]]", operations.findTable(this.tableName).toString());
+        operations.dropTable(this.tableName);
+
     }
 
     @Test
-    public void insertROWTest() {
+    public void insertROWTest() throws SQLException {
+        this.createTableWithValues();
+        DataSetInterface row3 = new DataSet();
+        row3.put("track_name", "'track_3'");
+        row3.put("track_id", 3);
+        assertTrue(operations.insertROW(this.tableName, row3));
+        operations.dropTable(this.tableName);
     }
 
     @Test
-    public void updateValueTest() {
+    public void updateValueTest() throws SQLException {
+        this.createTableWithValues();
+        String lookUp = "track_name = 'track_1'";
+        String newValue = "track_id = 21";
+        assertEquals("[[track_name, track_id], [track_1, 21]]", operations.updateValue(this.tableName, lookUp, newValue).toString());
+        operations.dropTable(this.tableName);
     }
 
     @Test
-    public void deleteValueTest() {
+    public void deleteValueTest() throws SQLException {
+        this.createTableWithValues();
+        String lookUp = "track_name = 'track_1'";
+        assertEquals("[[track_name, track_id], [track_1, 1]]", operations.deleteValue(this.tableName, lookUp).toString());
+        operations.dropTable(this.tableName);
     }
 
     @Test
-    public void closeConnectionTest() {
+    public void closeConnectionTest() throws SQLException {
+        assertTrue(operations.closeConnection());
     }
 }

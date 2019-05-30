@@ -48,7 +48,7 @@ public class DataSet implements DataSetInterface {
             if (column instanceof List) {
                 for(Object element: (List)column) {
                     if (element instanceof String) {
-                        
+
                     } else {}
                 }
             } else {}
