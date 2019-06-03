@@ -1,4 +1,4 @@
-package homeTest;
+package simpleCollections;
 
 import java.util.*;
 

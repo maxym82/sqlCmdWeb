@@ -1,8 +1,7 @@
-package homeTest;
+package simpleCollections;
 
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.NoSuchElementException;
 
 public class SimpleLinkedList <E> implements SimpleList<E> {

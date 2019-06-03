@@ -56,13 +56,18 @@ public class CommandInvoker {
     public void start () {
         inputOutput.outputln("Welcome to sqlCmd.");
         inputOutput.outputln("For list of commands available type help.");
-        inputOutput.outputln("For help on a particular comment type command following by \"?\"");
+        inputOutput.outputln("For help on a particular command type command following by \"?\"");
 
         loop: while (true) {
             if (!this.dataBase.isConnected()) {
                 inputOutput.outputln("You are on an unconnected mode.");
                 inputOutput.outputln("Type your commend here");
-                userInput = new ArrayList<String>(Arrays.asList(inputOutput.input(prompt).split(" +")));
+                String strUserInput = inputOutput.input(prompt);
+                if (strUserInput.equals("") || strUserInput == null || strUserInput.equals(" ") || strUserInput.equals("null")) {
+                    System.out.println("Icorrect input, type \"help\" for help");
+                    continue;
+                }
+                userInput = new ArrayList<String>(Arrays.asList(strUserInput.split(" +")));
                 if (Arrays.stream(commandsWhenNotConnected).anyMatch(userInput.get(0)::equals)) {
                     if (userInput.get(0).equals("help")) {
                         inputOutput.outputln("On unconnected mode you can use following commands:");

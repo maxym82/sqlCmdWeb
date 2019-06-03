@@ -1,0 +1,18 @@
+package integration;
+
+import java.io.IOException;
+import java.io.OutputStream;
+
+public class testOutputStream extends OutputStream {
+    private String log;
+
+    @Override
+    public void write(int i) throws IOException {
+        log += String.valueOf((char)i);
+
+    }
+
+    public String getData() {
+        return log;
+    }
+}

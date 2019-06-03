@@ -1,10 +1,8 @@
-package homeTest;
+package simpleCollections;
 
-import java.sql.SQLOutput;
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 
-public class Main {
+public class MainSimpleArray {
     public static void main(String[] args) {
         Integer[] listElements = {1, 2, 3, 4, 5, 6, 7};
         Integer[] expectedElements = {2, 3, 4, 5, 6, 7};
@@ -95,6 +93,10 @@ public class Main {
 
 
         System.out.print("OK");
+
+
+
+
     }
 
 }

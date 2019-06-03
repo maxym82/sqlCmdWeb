@@ -3,14 +3,18 @@ package view;
 import java.io.Console;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class InputOutput implements View {
-    private Scanner userInput = new Scanner(System.in);
+    private Scanner userInput;
     @Override
     public String input(String prompt) {
         System.out.print(prompt);
-        return userInput.nextLine();
+        try {
+            userInput = new Scanner(System.in);
+            return userInput.nextLine();
+        } catch (NoSuchElementException e) {return null;}
     }
 
     @Override
