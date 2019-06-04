@@ -1,7 +1,7 @@
 package controller.command;
 
-import dataBase.DataBaseInterface;
 import controller.Command;
+import dataBase.DataBaseInterface;
 import dataBase.DataBaseOperations;
 import view.InputOutput;
 

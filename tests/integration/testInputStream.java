@@ -5,24 +5,40 @@ import java.io.InputStream;
 
 public class testInputStream extends InputStream {
     private String line;
+    private boolean endLine = false;
+
     @Override
     public int read() throws IOException {
-        if (this.line.length() == 0) {return -1;}
-        char ch = this.line.charAt(0);
-        this.line = this.line.substring(1);
+        if (line.length() == 0) {
+            return -1;
+        }
+
+        if (endLine) {
+            endLine = false;
+            return -1;
+        }
+
+        char ch = line.charAt(0);
+        line = line.substring(1);
+
+        if (ch == '\n') {
+            endLine = true;
+        }
+
         return (int) ch;
     }
 
-
-    public void addInput (String line) {
+    public void addInput(String line) {
         if (this.line == null) {
             this.line = line;
         } else {
-            this.line = this.line + "\n" + line;
+            this.line += "\n" + line;
         }
     }
 
-    public String toString () {
-        return this.line;
+    @Override
+    public synchronized void reset() throws IOException {
+        line = null;
+        endLine = false;
     }
 }

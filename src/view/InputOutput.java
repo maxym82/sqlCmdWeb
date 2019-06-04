@@ -13,7 +13,7 @@ public class InputOutput implements View {
         System.out.print(prompt);
         try {
             userInput = new Scanner(System.in);
-            return userInput.nextLine();
+            return userInput.next();
         } catch (NoSuchElementException e) {return null;}
     }
 
