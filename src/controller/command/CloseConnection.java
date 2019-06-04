@@ -31,8 +31,7 @@ public class CloseConnection implements Command {
                         console.outputln("Connection to DB \" " + this.dataBase.getDataBaseName() + " \" closed");
                         return;
                     } else {
-                        console.outputln("Were you really connected to any DB??? somwthing went wrong...");
-                        return;
+                        //it can not be called from unconnected mode...
                     }
                 } catch (Exception e) {
                     console.outputln(e.getMessage());
