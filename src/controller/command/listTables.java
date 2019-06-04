@@ -33,7 +33,7 @@ public class listTables implements Command {
             console.outputln(String.format("On Data Base \" %s \" you can find this tables available: ", this.dataBase.getDataBaseName()));
             try {
                 if (dataBase.listTables().size() == 0) {
-                    console.outputln("No table available. DB is empty");
+                    console.outputln("No tables available. DB is empty");
                 } else {
                     for (String tableName : dataBase.listTables()) {
                         console.outputln("+" + "-".repeat(tableName.length() + 11) + "+");

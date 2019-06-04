@@ -11,8 +11,6 @@ public interface DataBaseInterface {
 
     String getDataBaseName();
 
-    boolean createDB() throws SQLException;
-
     boolean connectToDataBase(String dataBaseName, String username, String password) throws SQLException;
 
     List<String> listTables() throws SQLException;

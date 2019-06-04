@@ -58,11 +58,6 @@ public class DataBaseOperations implements DataBaseInterface {
         return dataBaseName;
     }
 
-    @Override
-    public boolean createDB() throws SQLException {
-//        todo: implement method to create DB
-        return true;
-    }
 
     @Override
     public boolean connectToDataBase(String dataBaseName, String username, String password) throws SQLException {
@@ -73,11 +68,7 @@ public class DataBaseOperations implements DataBaseInterface {
         try {
             ResultSet listOfDb = null;
             this.connection = DriverManager.getConnection(dbURL, this.username, this.password);
-            if (connection != null) {
-                return true;
-            } else {
-                throw new RuntimeException("unable to create database connection");
-            }
+            return true;
         } catch (SQLException e) {
             throw new SQLException("something went wrong, please check your database name, user name and password\n" + e.getMessage());
         }
@@ -262,7 +253,7 @@ public class DataBaseOperations implements DataBaseInterface {
                 return true;
 
             } catch (Exception e) {
-                throw new SQLException(e);
+                throw new SQLException("Check data you entered\n" + e);
             }
         } else {
             return false;
@@ -276,11 +267,14 @@ public class DataBaseOperations implements DataBaseInterface {
         String statementString = "UPDATE " + tableName + " SET " + newValues + " WHERE " + lookupValues;
         if (connection != null) {
             try {
-                Statement statement = this.connection.createStatement();
+                Statement statement = connection.createStatement();
+                ResultSet resalt = statement.executeQuery("SELECT  * from " + tableName + " WHERE " + lookupValues);
+                if (!resalt.next()) {throw new SQLException("There is no such an values in this table");}
+                statement = this.connection.createStatement();
                 statement.executeUpdate(statementString);
                 updatedRow = this.findTable(tableName, newValues);
             } catch (SQLException e) {
-                throw new SQLException(e.getMessage());
+                throw new SQLException("Please check data you entered\n" + e.getMessage());
             }
         }
         return updatedRow;

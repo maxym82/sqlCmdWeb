@@ -41,7 +41,6 @@ public class CommandInvoker {
     private void setCommandList () {
         commands.add(new ClearTable(this.dataBase, this.inputOutput));
         commands.add(new CloseConnection(this.dataBase, this.inputOutput));
-        commands.add(new CreateDB(this.dataBase, this.inputOutput));
         commands.add(new CreateTable(this.dataBase, this.inputOutput));
         commands.add(new DeleteValue(this.dataBase, this.inputOutput));
         commands.add(new DropTable(this.dataBase, this.inputOutput));

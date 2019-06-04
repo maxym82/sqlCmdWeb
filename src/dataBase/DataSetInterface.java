@@ -12,6 +12,5 @@ public interface DataSetInterface {
     public Object getValue (String key);
     public void updateDataFrom(DataSetInterface newValue);
     public String toString ();
-    public String deepToString();
     Iterable<Map.Entry<String, Object>> entrySet();
 }

@@ -32,7 +32,7 @@ public class DropTable implements Command {
             if (dataBase.dropTable(command.get(1))) {
                 console.outputln("Table \"" + command.get(1) + "\" has been deleted");
             } else {
-                console.outputln("Something went wrong, check your spelling");
+                //console.outputln("Something went wrong, check your spelling");
             }
         } catch (Exception e) {
             console.outputln(e.getMessage());

@@ -251,6 +251,55 @@ public class integrationTest {
     }
 
     @Test
+    public void testConnectError () throws IOException {
+        //given
+        in.addInput("connect anydb maksym");
+        in.addInput("password");
+        in.addInput("exit");
+        in.addInput("y");
+        //when
+        Main.main(new String[0]);
+        //then
+        String outputPattern = "Welcome to sqlCmd.\n" +
+                "For list of commands available type help.\n" +
+                "For help on a particular command type command following by \"?\"\n" +
+                "You are on an unconnected mode.\n" +
+                "Type your commend here\n" +
+                "sqlCmd_> password: something went wrong, please check your database name, user name and password\n" +
+                "FATAL: database \"anydb\" does not exist\n" +
+                "You are on an unconnected mode.\n" +
+                "Type your commend here\n" +
+                "sqlCmd_> You are about to close the progran, please confirm (Y/N): Programm successfully closed\n";
+
+        assertEquals(outputPattern, out.getData());
+    }
+
+
+
+
+    @Test
+    public void testConnectWrongInput () throws IOException {
+        //given
+        in.addInput("connect tracklist");
+        in.addInput("exit");
+        in.addInput("y");
+        //when
+        Main.main(new String[0]);
+        //then
+        String outputPattern = "Welcome to sqlCmd.\n" +
+                "For list of commands available type help.\n" +
+                "For help on a particular command type command following by \"?\"\n" +
+                "You are on an unconnected mode.\n" +
+                "Type your commend here\n" +
+                "sqlCmd_> Incorrect command format, please type \"help\" for help\n" +
+                "You are on an unconnected mode.\n" +
+                "Type your commend here\n" +
+                "sqlCmd_> You are about to close the progran, please confirm (Y/N): Programm successfully closed\n";
+
+        assertEquals(outputPattern, out.getData());
+    }
+
+    @Test
     public void testUnsupported () throws IOException {
         //given
         in.addInput("connect tracklist maksym");
@@ -331,6 +380,191 @@ public class integrationTest {
     }
 
     @Test
+    public void testDropIncorrectFormat () throws IOException {
+        //given
+        in.addInput("connect tracklist maksym");
+        in.addInput("password");
+        in.addInput("drop");
+        in.addInput("close");
+        in.addInput("Y");
+        in.addInput("exit");
+        in.addInput("y");
+        //when
+        Main.main(new String[0]);
+        //then
+        String outputPattern = "Welcome to sqlCmd.\n" +
+                "For list of commands available type help.\n" +
+                "For help on a particular command type command following by \"?\"\n" +
+                "You are on an unconnected mode.\n" +
+                "Type your commend here\n" +
+                "sqlCmd_> password: You have connected to DB:tracklist\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/tracklist/_> Incorrect format, please type \"help\" for help\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/tracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" tracklist \" closed\n" +
+                "You are on an unconnected mode.\n" +
+                "Type your commend here\n" +
+                "sqlCmd_> You are about to close the progran, please confirm (Y/N): Programm successfully closed\n";
+
+        assertEquals(outputPattern, out.getData());
+    }
+
+    @Test
+    public void testDropIncorrectTable () throws IOException {
+        //given
+        in.addInput("connect tracklist maksym");
+        in.addInput("password");
+        in.addInput("drop tracks");
+        in.addInput("close");
+        in.addInput("Y");
+        in.addInput("exit");
+        in.addInput("y");
+        //when
+        Main.main(new String[0]);
+        //then
+        String outputPattern = "Welcome to sqlCmd.\n" +
+                "For list of commands available type help.\n" +
+                "For help on a particular command type command following by \"?\"\n" +
+                "You are on an unconnected mode.\n" +
+                "Type your commend here\n" +
+                "sqlCmd_> password: You have connected to DB:tracklist\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/tracklist/_> org.postgresql.util.PSQLException: ERROR: table \"tracks\" does not exist\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/tracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" tracklist \" closed\n" +
+                "You are on an unconnected mode.\n" +
+                "Type your commend here\n" +
+                "sqlCmd_> You are about to close the progran, please confirm (Y/N): Programm successfully closed\n";
+
+        assertEquals(outputPattern, out.getData());
+    }
+
+
+
+
+    @Test
+    public void testInsertIncorrectFormat () throws IOException {
+        //given
+        in.addInput("connect tracklist maksym");
+        in.addInput("password");
+        in.addInput("create tracks track_name|text track_id|int");
+        in.addInput("insert");
+        in.addInput("drop tracks");
+        in.addInput("close");
+        in.addInput("Y");
+        in.addInput("exit");
+        in.addInput("y");
+        //when
+        Main.main(new String[0]);
+        //then
+        String outputPattern = "Welcome to sqlCmd.\n" +
+                "For list of commands available type help.\n" +
+                "For help on a particular command type command following by \"?\"\n" +
+                "You are on an unconnected mode.\n" +
+                "Type your commend here\n" +
+                "sqlCmd_> password: You have connected to DB:tracklist\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/tracklist/_> DB \"tracks\" has been created\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/tracklist/_> Incorrect command format, please type \"help\" for help\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/tracklist/_> Table \"tracks\" has been deleted\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/tracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" tracklist \" closed\n" +
+                "You are on an unconnected mode.\n" +
+                "Type your commend here\n" +
+                "sqlCmd_> You are about to close the progran, please confirm (Y/N): Programm successfully closed\n";
+
+        assertEquals(outputPattern, out.getData());
+    }
+
+
+    @Test
+    public void testInsertIncorrectValue () throws IOException {
+        //given
+        in.addInput("connect tracklist maksym");
+        in.addInput("password");
+        in.addInput("create tracks track_name|text track_id|int");
+        in.addInput("insert tracks track_name|21 track_id|text");
+        in.addInput("drop tracks");
+        in.addInput("close");
+        in.addInput("Y");
+        in.addInput("exit");
+        in.addInput("y");
+        //when
+        Main.main(new String[0]);
+        //then
+        String outputPattern = "Welcome to sqlCmd.\n" +
+                "For list of commands available type help.\n" +
+                "For help on a particular command type command following by \"?\"\n" +
+                "You are on an unconnected mode.\n" +
+                "Type your commend here\n" +
+                "sqlCmd_> password: You have connected to DB:tracklist\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/tracklist/_> DB \"tracks\" has been created\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/tracklist/_> Something went wrong \n" +
+                "java.sql.SQLException: Check data you entered\n" +
+                "org.postgresql.util.PSQLException: ERROR: column \"text\" does not exist\n" +
+                "  Position: 55\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/tracklist/_> Table \"tracks\" has been deleted\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/tracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" tracklist \" closed\n" +
+                "You are on an unconnected mode.\n" +
+                "Type your commend here\n" +
+                "sqlCmd_> You are about to close the progran, please confirm (Y/N): Programm successfully closed\n";
+
+        assertEquals(outputPattern, out.getData());
+    }
+
+    @Test
+    public void testInsertIncorrectTable () throws IOException {
+        //given
+        in.addInput("connect tracklist maksym");
+        in.addInput("password");
+        in.addInput("insert tracks1 track_name|21 track_id|text");
+        in.addInput("close");
+        in.addInput("Y");
+        in.addInput("exit");
+        in.addInput("y");
+        //when
+        Main.main(new String[0]);
+        //then
+        String outputPattern = "Welcome to sqlCmd.\n" +
+                "For list of commands available type help.\n" +
+                "For help on a particular command type command following by \"?\"\n" +
+                "You are on an unconnected mode.\n" +
+                "Type your commend here\n" +
+                "sqlCmd_> password: You have connected to DB:tracklist\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/tracklist/_> Something went wrong \n" +
+                "java.lang.RuntimeException: Table \"tracks1\" does not exist\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/tracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" tracklist \" closed\n" +
+                "You are on an unconnected mode.\n" +
+                "Type your commend here\n" +
+                "sqlCmd_> You are about to close the progran, please confirm (Y/N): Programm successfully closed\n";
+
+        assertEquals(outputPattern, out.getData());
+    }
+
+
+    @Test
     public void testFind () throws IOException {
         //given
         in.addInput("connect tracklist maksym");
@@ -381,6 +615,73 @@ public class integrationTest {
 
         assertEquals(outputPattern, out.getData());
     }
+
+    @Test
+    public void testFindIncorrectFormat () throws IOException {
+        //given
+        in.addInput("connect tracklist maksym");
+        in.addInput("password");
+        in.addInput("find");
+        in.addInput("close");
+        in.addInput("Y");
+        in.addInput("exit");
+        in.addInput("y");
+        //when
+        Main.main(new String[0]);
+        //then
+        String outputPattern = "Welcome to sqlCmd.\n" +
+                "For list of commands available type help.\n" +
+                "For help on a particular command type command following by \"?\"\n" +
+                "You are on an unconnected mode.\n" +
+                "Type your commend here\n" +
+                "sqlCmd_> password: You have connected to DB:tracklist\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/tracklist/_> Incorrect command format, please type \"help\" for help\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/tracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" tracklist \" closed\n" +
+                "You are on an unconnected mode.\n" +
+                "Type your commend here\n" +
+                "sqlCmd_> You are about to close the progran, please confirm (Y/N): Programm successfully closed\n";
+
+        assertEquals(outputPattern, out.getData());
+    }
+
+
+    @Test
+    public void testFindIncorrectName () throws IOException {
+        //given
+        in.addInput("connect tracklist maksym");
+        in.addInput("password");
+        in.addInput("find tracks");
+        in.addInput("close");
+        in.addInput("Y");
+        in.addInput("exit");
+        in.addInput("y");
+        //when
+        Main.main(new String[0]);
+        //then
+        String outputPattern = "Welcome to sqlCmd.\n" +
+                "For list of commands available type help.\n" +
+                "For help on a particular command type command following by \"?\"\n" +
+                "You are on an unconnected mode.\n" +
+                "Type your commend here\n" +
+                "sqlCmd_> password: You have connected to DB:tracklist\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/tracklist/_> org.postgresql.util.PSQLException: ERROR: relation \"tracks\" does not exist\n" +
+                "  Position: 16\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/tracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" tracklist \" closed\n" +
+                "You are on an unconnected mode.\n" +
+                "Type your commend here\n" +
+                "sqlCmd_> You are about to close the progran, please confirm (Y/N): Programm successfully closed\n";
+
+        assertEquals(outputPattern, out.getData());
+    }
+
 
     @Test
     public void testCreateTable () throws IOException {
@@ -472,6 +773,95 @@ public class integrationTest {
         assertEquals(outputPattern, out.getData());
     }
 
+
+    @Test
+    public void testDeleteIncorrectFormat () throws IOException {
+        //given
+        in.addInput("connect tracklist maksym");
+        in.addInput("password");
+        in.addInput("create tracks track_name|text track_id|int");
+        in.addInput("insert tracks track_name|'track1' track_id|12");
+        in.addInput("insert tracks track_name|'track2' track_id|21");
+        in.addInput("delete tracks");
+        in.addInput("Y");
+        in.addInput("drop tracks");
+        in.addInput("close");
+        in.addInput("Y");
+        in.addInput("exit");
+        in.addInput("y");
+        //when
+        Main.main(new String[0]);
+        //then
+        String outputPattern = "Welcome to sqlCmd.\n" +
+                "For list of commands available type help.\n" +
+                "For help on a particular command type command following by \"?\"\n" +
+                "You are on an unconnected mode.\n" +
+                "Type your commend here\n" +
+                "sqlCmd_> password: You have connected to DB:tracklist\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/tracklist/_> DB \"tracks\" has been created\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/tracklist/_> Row was successfully inserted\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/tracklist/_> Row was successfully inserted\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/tracklist/_> Incorrect command format, please type \"help\" for help\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/tracklist/_> This command is not supported, please type help for \"help\"\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/tracklist/_> Table \"tracks\" has been deleted\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/tracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" tracklist \" closed\n" +
+                "You are on an unconnected mode.\n" +
+                "Type your commend here\n" +
+                "sqlCmd_> You are about to close the progran, please confirm (Y/N): Programm successfully closed\n";
+
+        assertEquals(outputPattern, out.getData());
+    }
+
+    @Test
+    public void testDeleteIncorrectTable () throws IOException {
+        //given
+        in.addInput("connect tracklist maksym");
+        in.addInput("password");
+        in.addInput("delete tracks track_id|12");
+        in.addInput("Y");
+        in.addInput("close");
+        in.addInput("Y");
+        in.addInput("exit");
+        in.addInput("y");
+        //when
+        Main.main(new String[0]);
+        //then
+        String outputPattern = "Welcome to sqlCmd.\n" +
+                "For list of commands available type help.\n" +
+                "For help on a particular command type command following by \"?\"\n" +
+                "You are on an unconnected mode.\n" +
+                "Type your commend here\n" +
+                "sqlCmd_> password: You have connected to DB:tracklist\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/tracklist/_> You are about to delete row that contains Value track_id = 12\n" +
+                "Plese confirm (Y/N): Something went wrong \n" +
+                "java.sql.SQLException: org.postgresql.util.PSQLException: ERROR: relation \"tracks\" does not exist\n" +
+                "  Position: 16\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/tracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" tracklist \" closed\n" +
+                "You are on an unconnected mode.\n" +
+                "Type your commend here\n" +
+                "sqlCmd_> You are about to close the progran, please confirm (Y/N): Programm successfully closed\n";
+
+        assertEquals(outputPattern, out.getData());
+    }
+
     @Test
     public void testGetDataBaseName () throws IOException {
         //given
@@ -546,6 +936,38 @@ public class integrationTest {
     }
 
     @Test
+    public void testListTablesWrongInput () throws IOException {
+        //given
+        in.addInput("connect tracklist maksym");
+        in.addInput("password");
+        in.addInput("list something");;
+        in.addInput("close");
+        in.addInput("Y");
+        in.addInput("exit");
+        in.addInput("y");
+        //when
+        Main.main(new String[0]);
+        //then
+        String outputPattern = "Welcome to sqlCmd.\n" +
+                "For list of commands available type help.\n" +
+                "For help on a particular command type command following by \"?\"\n" +
+                "You are on an unconnected mode.\n" +
+                "Type your commend here\n" +
+                "sqlCmd_> password: You have connected to DB:tracklist\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/tracklist/_> Incorrect command format, please type \"help\" for help\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/tracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" tracklist \" closed\n" +
+                "You are on an unconnected mode.\n" +
+                "Type your commend here\n" +
+                "sqlCmd_> You are about to close the progran, please confirm (Y/N): Programm successfully closed\n";
+
+        assertEquals(outputPattern, out.getData());
+    }
+
+    @Test
     public void testUpdateValue () throws IOException {
         //given
         in.addInput("connect tracklist maksym");
@@ -599,6 +1021,266 @@ public class integrationTest {
 
         assertEquals(outputPattern, out.getData());
     }
+
+    @Test
+    public void testUpdateValueWrongInput () throws IOException {
+        //given
+        in.addInput("connect tracklist maksym");
+        in.addInput("password");
+        in.addInput("create tracks track_name|text track_id|int");
+        in.addInput("insert tracks track_name|'track1' track_id|12");
+        in.addInput("insert tracks track_name|'track2' track_id|21");
+        in.addInput("update tracks");
+        in.addInput("drop tracks");
+        in.addInput("close");
+        in.addInput("Y");
+        in.addInput("exit");
+        in.addInput("y");
+        //when
+        Main.main(new String[0]);
+        //then
+        String outputPattern = "Welcome to sqlCmd.\n" +
+                "For list of commands available type help.\n" +
+                "For help on a particular command type command following by \"?\"\n" +
+                "You are on an unconnected mode.\n" +
+                "Type your commend here\n" +
+                "sqlCmd_> password: You have connected to DB:tracklist\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/tracklist/_> DB \"tracks\" has been created\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/tracklist/_> Row was successfully inserted\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/tracklist/_> Row was successfully inserted\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/tracklist/_> Command format is wrong... Pleae type 'help' for help\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/tracklist/_> Table \"tracks\" has been deleted\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/tracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" tracklist \" closed\n" +
+                "You are on an unconnected mode.\n" +
+                "Type your commend here\n" +
+                "sqlCmd_> You are about to close the progran, please confirm (Y/N): Programm successfully closed\n";
+
+        assertEquals(outputPattern, out.getData());
+    }
+
+    @Test
+    public void testCreateTableWrongFormat () throws IOException {
+        //given
+        in.addInput("connect tracklist maksym");
+        in.addInput("password");
+        in.addInput("create");
+        in.addInput("close");
+        in.addInput("Y");
+        in.addInput("exit");
+        in.addInput("y");
+        //when
+        Main.main(new String[0]);
+        //then
+        String outputPattern = "Welcome to sqlCmd.\n" +
+                "For list of commands available type help.\n" +
+                "For help on a particular command type command following by \"?\"\n" +
+                "You are on an unconnected mode.\n" +
+                "Type your commend here\n" +
+                "sqlCmd_> password: You have connected to DB:tracklist\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/tracklist/_> Command format is wrong... Pleae type 'help' for help\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/tracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" tracklist \" closed\n" +
+                "You are on an unconnected mode.\n" +
+                "Type your commend here\n" +
+                "sqlCmd_> You are about to close the progran, please confirm (Y/N): Programm successfully closed\n";
+
+        assertEquals(outputPattern, out.getData());
+    }
+
+
+    @Test
+    public void testCreateTableWrongData () throws IOException {
+        //given
+        in.addInput("connect tracklist maksym");
+        in.addInput("password");
+        in.addInput("create tracks trak|anything");
+        in.addInput("drop tracks");
+        in.addInput("close");
+        in.addInput("Y");
+        in.addInput("exit");
+        in.addInput("y");
+        //when
+        Main.main(new String[0]);
+        //then
+        String outputPattern = "Welcome to sqlCmd.\n" +
+                "For list of commands available type help.\n" +
+                "For help on a particular command type command following by \"?\"\n" +
+                "You are on an unconnected mode.\n" +
+                "Type your commend here\n" +
+                "sqlCmd_> password: You have connected to DB:tracklist\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/tracklist/_> java.lang.RuntimeException: This data type \"anything\" is not supported. Type \"help\" for help\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/tracklist/_> org.postgresql.util.PSQLException: ERROR: table \"tracks\" does not exist\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/tracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" tracklist \" closed\n" +
+                "You are on an unconnected mode.\n" +
+                "Type your commend here\n" +
+                "sqlCmd_> You are about to close the progran, please confirm (Y/N): Programm successfully closed\n";
+
+        assertEquals(outputPattern, out.getData());
+    }
+
+
+    @Test
+    public void testUpdateValueWrongCondition () throws IOException {
+        //given
+        in.addInput("connect tracklist maksym");
+        in.addInput("password");
+        in.addInput("create tracks track_name|text track_id|int");
+        in.addInput("insert tracks track_name|'track1' track_id|12");
+        in.addInput("insert tracks track_name|'track2' track_id|21");
+        in.addInput("update tracks track_name|'track4' track_id|121");
+        in.addInput("drop tracks");
+        in.addInput("close");
+        in.addInput("Y");
+        in.addInput("exit");
+        in.addInput("y");
+        //when
+        Main.main(new String[0]);
+        //then
+        String outputPattern = "Welcome to sqlCmd.\n" +
+                "For list of commands available type help.\n" +
+                "For help on a particular command type command following by \"?\"\n" +
+                "You are on an unconnected mode.\n" +
+                "Type your commend here\n" +
+                "sqlCmd_> password: You have connected to DB:tracklist\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/tracklist/_> DB \"tracks\" has been created\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/tracklist/_> Row was successfully inserted\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/tracklist/_> Row was successfully inserted\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/tracklist/_> Following row will be modified:\n" +
+                "track_name  track_id  \n" +
+                "\n" +
+                "Please check data you entered\n" +
+                "There is no such an values in this table\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/tracklist/_> Table \"tracks\" has been deleted\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/tracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" tracklist \" closed\n" +
+                "You are on an unconnected mode.\n" +
+                "Type your commend here\n" +
+                "sqlCmd_> You are about to close the progran, please confirm (Y/N): Programm successfully closed\n";
+
+        assertEquals(outputPattern, out.getData());
+    }
+
+    @Test
+    public void testUpdateValueWrongValue () throws IOException {
+        //given
+        in.addInput("connect tracklist maksym");
+        in.addInput("password");
+        in.addInput("create tracks track_name|text track_id|int");
+        in.addInput("insert tracks track_name|'track1' track_id|12");
+        in.addInput("insert tracks track_name|'track2' track_id|21");
+        in.addInput("update tracks track_name|'track1' track_id|text");
+        in.addInput("drop tracks");
+        in.addInput("close");
+        in.addInput("Y");
+        in.addInput("exit");
+        in.addInput("y");
+        //when
+        Main.main(new String[0]);
+        //then
+        String outputPattern = "Welcome to sqlCmd.\n" +
+                "For list of commands available type help.\n" +
+                "For help on a particular command type command following by \"?\"\n" +
+                "You are on an unconnected mode.\n" +
+                "Type your commend here\n" +
+                "sqlCmd_> password: You have connected to DB:tracklist\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/tracklist/_> DB \"tracks\" has been created\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/tracklist/_> Row was successfully inserted\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/tracklist/_> Row was successfully inserted\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/tracklist/_> Following row will be modified:\n" +
+                "track_name  track_id  \n" +
+                "track1      12        \n" +
+                "\n" +
+                "Please check data you entered\n" +
+                "ERROR: column \"text\" does not exist\n" +
+                "  Position: 30\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/tracklist/_> Table \"tracks\" has been deleted\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/tracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" tracklist \" closed\n" +
+                "You are on an unconnected mode.\n" +
+                "Type your commend here\n" +
+                "sqlCmd_> You are about to close the progran, please confirm (Y/N): Programm successfully closed\n";
+
+        assertEquals(outputPattern, out.getData());
+    }
+
+
+    @Test
+    public void testCloseWithoutY () throws IOException {
+        //given
+        in.addInput("connect tracklist maksym");
+        in.addInput("password");
+        in.addInput("close");
+        in.addInput("n");
+        in.addInput("close");
+        in.addInput("e");
+        in.addInput("close");
+        in.addInput("y");
+        in.addInput("exit");
+        in.addInput("y");
+        //when
+        Main.main(new String[0]);
+        //then
+        String outputPattern = "Welcome to sqlCmd.\n" +
+                "For list of commands available type help.\n" +
+                "For help on a particular command type command following by \"?\"\n" +
+                "You are on an unconnected mode.\n" +
+                "Type your commend here\n" +
+                "sqlCmd_> password: You have connected to DB:tracklist\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/tracklist/_> You are about to close connection to DB, please confirm (Y/N): You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd_> You are about to close connection to DB, please confirm (Y/N): Please select only Y or N: Please select only Y or N: Connection to DB \" tracklist \" closed\n" +
+                "You are on an unconnected mode.\n" +
+                "Type your commend here\n" +
+                "sqlCmd_> You are about to close the progran, please confirm (Y/N): Programm successfully closed\n";
+
+        assertEquals(outputPattern, out.getData());
+    }
+
 
 
 
