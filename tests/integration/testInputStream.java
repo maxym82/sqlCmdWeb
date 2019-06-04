@@ -38,7 +38,7 @@ public class testInputStream extends InputStream {
 
     @Override
     public synchronized void reset() throws IOException {
-        line = null;
+        this.line = null;
         endLine = false;
     }
 }

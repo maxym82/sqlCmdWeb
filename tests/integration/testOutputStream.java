@@ -8,11 +8,15 @@ public class testOutputStream extends OutputStream {
 
     @Override
     public void write(int i) throws IOException {
-        log += String.valueOf((char)i);
+        this.log += String.valueOf((char)i);
 
     }
 
     public String getData() {
-        return log;
+        return this.log;
+    }
+
+    public void clearLog() {
+        this.log = "";
     }
 }

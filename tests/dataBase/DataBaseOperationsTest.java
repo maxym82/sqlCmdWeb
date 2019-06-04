@@ -17,7 +17,7 @@ public class DataBaseOperationsTest {
     @Before
     public void setup() throws SQLException {
         operations = new DataBaseOperations();
-        operations.connectToDataBase("maksym", "maksym", "password");
+        operations.connectToDataBase("tracklist", "maksym", "password");
         newTable.put("track_name", "text");
         newTable.put("track_id", "int");
 
@@ -39,7 +39,7 @@ public class DataBaseOperationsTest {
 
     @Test
     public void isDBexistTest() throws SQLException {
-        String dbExist = "maksym";
+        String dbExist = "tracklist";
         String dbDoesNotExist = "AnyDB";
         assertEquals(true, operations.isDBexist(dbExist));
         assertEquals(false, operations.isDBexist(dbDoesNotExist));
@@ -47,7 +47,7 @@ public class DataBaseOperationsTest {
 
     @Test
     public void getDataBaseNameTest() {
-        assertEquals("maksym", operations.getDataBaseName());
+        assertEquals("tracklist", operations.getDataBaseName());
 
     }
 
@@ -63,7 +63,7 @@ public class DataBaseOperationsTest {
     @Test
     public void listTablesTest() throws SQLException {
         String[] tableNames = operations.listTables().toArray(new String[0]);
-        assertArrayEquals(new String[] {"albums", "songs"}, tableNames);
+        assertArrayEquals(new String[] {"album", "artists", "songs"}, tableNames);
     }
 
     @Test

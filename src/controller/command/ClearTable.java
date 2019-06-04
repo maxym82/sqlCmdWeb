@@ -28,7 +28,9 @@ public class ClearTable implements Command {
             return;
         }
         try {
-            this.dataBase.clearTable(command.get(1));
+            if (this.dataBase.clearTable(command.get(1))) {
+                console.outputln("Table \"" + command.get(1) + "\" has been successfully cleaned!" );
+            };
         } catch (Exception e) {
             console.outputln(e.getMessage());
         }

@@ -32,7 +32,7 @@ public class ConnectToDataBase implements Command {
         try {
             dataBase.connectToDataBase(command.get(1), command.get(2), userPassword);
             if (dataBase.isConnected()) {
-                console.outputln("You hafe connected to DB:" + command.get(1));
+                console.outputln("You have connected to DB:" + command.get(1));
             } else {
                 console.outputln("Semething went wrong, please check DB name, and user credentials");
             }
