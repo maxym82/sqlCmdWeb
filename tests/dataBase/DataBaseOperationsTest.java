@@ -1,7 +1,6 @@
 package dataBase;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 import java.sql.SQLException;
 
@@ -10,17 +9,27 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertTrue;
 
 public class DataBaseOperationsTest {
-    private DataBaseOperations operations;
-    private String tableName = "tracks";
-    private DataSetInterface newTable = new DataSet();
+    private static DataBaseOperations operations = new DataBaseOperations();
+    private static String tableName = "tracks";
+    private static DataSetInterface newTable = new DataSet();
 
-    @Before
-    public void setup() throws SQLException {
-        operations = new DataBaseOperations();
+    @BeforeClass
+    public static void setup() throws SQLException {
         operations.connectToDataBase("tracklist", "maksym", "password");
+        operations.createDB("newtracklist");
+        operations.closeConnection();
+        operations.connectToDataBase("newtracklist", "maksym", "password");
         newTable.put("track_name", "text");
         newTable.put("track_id", "int");
 
+    }
+
+    @AfterClass
+    public static void close() throws SQLException {
+        operations.closeConnection();
+        operations.connectToDataBase("tracklist", "maksym", "password");
+        operations.dropDB("newTrackList");
+        operations.closeConnection();
     }
 
     private void createTableWithValues() throws SQLException {
@@ -39,7 +48,7 @@ public class DataBaseOperationsTest {
 
     @Test
     public void isDBexistTest() throws SQLException {
-        String dbExist = "tracklist";
+        String dbExist = "newtracklist";
         String dbDoesNotExist = "AnyDB";
         assertEquals(true, operations.isDBexist(dbExist));
         assertEquals(false, operations.isDBexist(dbDoesNotExist));
@@ -47,7 +56,7 @@ public class DataBaseOperationsTest {
 
     @Test
     public void getDataBaseNameTest() {
-        assertEquals("tracklist", operations.getDataBaseName());
+        assertEquals("newtracklist", operations.getDataBaseName());
 
     }
 
@@ -62,8 +71,10 @@ public class DataBaseOperationsTest {
 
     @Test
     public void listTablesTest() throws SQLException {
+        this.createTableWithValues();
         String[] tableNames = operations.listTables().toArray(new String[0]);
-        assertArrayEquals(new String[] {"album", "artists", "songs"}, tableNames);
+        assertArrayEquals(new String[] {this.tableName}, tableNames);
+        operations.dropTable(this.tableName);
     }
 
     @Test
@@ -128,5 +139,6 @@ public class DataBaseOperationsTest {
     @Test
     public void closeConnectionTest() throws SQLException {
         assertTrue(operations.closeConnection());
+        operations.connectToDataBase("newtracklist", "maksym", "password");
     }
 }

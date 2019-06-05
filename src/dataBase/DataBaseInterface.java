@@ -32,4 +32,8 @@ public interface DataBaseInterface {
     ArrayList<ArrayList<String>> deleteValue(String tableName, String lookupValues) throws SQLException;
 
     boolean closeConnection() throws SQLException;
+
+    boolean createDB(String dbName) throws SQLException;
+
+    boolean dropDB(String dbName) throws SQLException;
 }

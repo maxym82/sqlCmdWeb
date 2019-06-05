@@ -28,13 +28,14 @@ public class InputOutput implements View {
     }
 
 
-    public char[] inputPassword () {
+    public String inputPassword () {
         Console console = System.console();
         if (console == null) {
-            System.out.println("Couldn't get Console instance");
-            System.exit(0);
+            //running from IDE...
+            return this.input("password: ");
+
         }
-        return console.readPassword("password: ");
+        return String.valueOf(console.readPassword("password: "));
     }
 
 

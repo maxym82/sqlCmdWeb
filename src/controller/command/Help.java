@@ -50,7 +50,8 @@ public class Help implements Command {
         console.outputln("      Format update table_name column0|value0 colunm1|value1");
         console.outputln("      For example (update table1 column1|'roadHouse' column2|123) in this case row with value " +
                 "       'roadHouse' on a column1 will be found and column2's value of this row will be changed to 123");
-
+        console.outputln("12. make. To create new database");
+        console.outputln("      Format: make [database_name]");
 
     }
 }

@@ -1,6 +1,7 @@
 package integration;
 
 import controller.Main;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -16,15 +17,38 @@ public class integrationTest {
     private static testInputStream in;
     private static testOutputStream out;
 
+
     @BeforeClass
-    public static void setup () {
+    public static void createEnv () {
         in = new testInputStream();
         out = new testOutputStream();
 
         System.setIn(in);
         System.setOut(new PrintStream(out));
+
+        in.addInput("connect tracklist maksym");
+        in.addInput("password");
+        in.addInput("make newtracklist");
+        in.addInput("close");
+        in.addInput("y");
+        in.addInput("exit");
+        in.addInput("y");
+
+        Main.main(new String[0]);
     }
 
+    @AfterClass
+    public static void deleteEnv () {
+        in.addInput("connect tracklist maksym");
+        in.addInput("password");
+        in.addInput("erase newtracklist");
+        in.addInput("close");
+        in.addInput("y");
+        in.addInput("exit");
+        in.addInput("y");
+
+        Main.main(new String[0]);
+    }
     @Before
     public void clearInOut () throws IOException {
         in.reset();
@@ -78,7 +102,7 @@ public class integrationTest {
     @Test
     public void testHelpWhenConnected () throws IOException {
         //given
-        in.addInput("connect tracklist maksym");
+        in.addInput("connect newtracklist maksym");
         in.addInput("password");
         in.addInput("help");
         in.addInput("close");
@@ -93,10 +117,10 @@ public class integrationTest {
                 "For help on a particular command type command following by \"?\"\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
-                "sqlCmd_> password: You have connected to DB:tracklist\n" +
+                "sqlCmd_> password: You have connected to DB:newtracklist\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> Plese find list of available commands here:\n" +
+                "sqlCmd/newtracklist/_> Plese find list of available commands here:\n" +
                 "1. 'clear'. This command can be used to clear the content of the table.\n" +
                 "      format: clear [your_table_name], for example (clear table1)\n" +
                 "2. close. This commeand is used to close connection to the database and switch to unconnected mode.\n" +
@@ -123,9 +147,11 @@ public class integrationTest {
                 "11. update. This command is used to update value1 on a column1 where value on a column0 = value0\n" +
                 "      Format update table_name column0|value0 colunm1|value1\n" +
                 "      For example (update table1 column1|'roadHouse' column2|123) in this case row with value        'roadHouse' on a column1 will be found and column2's value of this row will be changed to 123\n" +
+                "12. make. To create new database\n" +
+                "      Format: make [database_name]\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" tracklist \" closed\n" +
+                "sqlCmd/newtracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" newtracklist \" closed\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
                 "sqlCmd_> You are about to close the progran, please confirm (Y/N): Programm successfully closed\n";
@@ -225,7 +251,7 @@ public class integrationTest {
     @Test
     public void testConnect () throws IOException {
         //given
-        in.addInput("connect tracklist maksym");
+        in.addInput("connect newtracklist maksym");
         in.addInput("password");
         in.addInput("close");
         in.addInput("Y");
@@ -239,10 +265,10 @@ public class integrationTest {
                 "For help on a particular command type command following by \"?\"\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
-                "sqlCmd_> password: You have connected to DB:tracklist\n" +
+                "sqlCmd_> password: You have connected to DB:newtracklist\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" tracklist \" closed\n" +
+                "sqlCmd/newtracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" newtracklist \" closed\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
                 "sqlCmd_> You are about to close the progran, please confirm (Y/N): Programm successfully closed\n";
@@ -280,7 +306,7 @@ public class integrationTest {
     @Test
     public void testConnectWrongInput () throws IOException {
         //given
-        in.addInput("connect tracklist");
+        in.addInput("connect newtracklist");
         in.addInput("exit");
         in.addInput("y");
         //when
@@ -302,7 +328,7 @@ public class integrationTest {
     @Test
     public void testUnsupported () throws IOException {
         //given
-        in.addInput("connect tracklist maksym");
+        in.addInput("connect newtracklist maksym");
         in.addInput("password");
         in.addInput("anything");
         in.addInput("close");
@@ -317,13 +343,13 @@ public class integrationTest {
                 "For help on a particular command type command following by \"?\"\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
-                "sqlCmd_> password: You have connected to DB:tracklist\n" +
+                "sqlCmd_> password: You have connected to DB:newtracklist\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> This command is not supported, please type help for \"help\"\n" +
+                "sqlCmd/newtracklist/_> This command is not supported, please type help for \"help\"\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" tracklist \" closed\n" +
+                "sqlCmd/newtracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" newtracklist \" closed\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
                 "sqlCmd_> You are about to close the progran, please confirm (Y/N): Programm successfully closed\n";
@@ -334,7 +360,7 @@ public class integrationTest {
     @Test
     public void testClearTable () throws IOException {
         //given
-        in.addInput("connect tracklist maksym");
+        in.addInput("connect newtracklist maksym");
         in.addInput("password");
         in.addInput("create tracks track_name|text track_id|int");
         in.addInput("insert tracks track_name|'track1' track_id|12");
@@ -353,25 +379,25 @@ public class integrationTest {
                 "For help on a particular command type command following by \"?\"\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
-                "sqlCmd_> password: You have connected to DB:tracklist\n" +
+                "sqlCmd_> password: You have connected to DB:newtracklist\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> DB \"tracks\" has been created\n" +
+                "sqlCmd/newtracklist/_> DB \"tracks\" has been created\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> Row was successfully inserted\n" +
+                "sqlCmd/newtracklist/_> Row was successfully inserted\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> Row was successfully inserted\n" +
+                "sqlCmd/newtracklist/_> Row was successfully inserted\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> Table \"tracks\" has been successfully cleaned!\n" +
+                "sqlCmd/newtracklist/_> Table \"tracks\" has been successfully cleaned!\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> Table \"tracks\" has been deleted\n" +
+                "sqlCmd/newtracklist/_> Table \"tracks\" has been deleted\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" tracklist \" closed\n" +
+                "sqlCmd/newtracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" newtracklist \" closed\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
                 "sqlCmd_> You are about to close the progran, please confirm (Y/N): Programm successfully closed\n";
@@ -382,7 +408,7 @@ public class integrationTest {
     @Test
     public void testClearTableIncorrectFormat () throws IOException {
         //given
-        in.addInput("connect tracklist maksym");
+        in.addInput("connect newtracklist maksym");
         in.addInput("password");
         in.addInput("clear");
         in.addInput("close");
@@ -397,13 +423,13 @@ public class integrationTest {
                 "For help on a particular command type command following by \"?\"\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
-                "sqlCmd_> password: You have connected to DB:tracklist\n" +
+                "sqlCmd_> password: You have connected to DB:newtracklist\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> Incorrect format, please type \"help\" for help\n" +
+                "sqlCmd/newtracklist/_> Incorrect format, please type \"help\" for help\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" tracklist \" closed\n" +
+                "sqlCmd/newtracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" newtracklist \" closed\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
                 "sqlCmd_> You are about to close the progran, please confirm (Y/N): Programm successfully closed\n";
@@ -414,7 +440,7 @@ public class integrationTest {
     @Test
     public void testClearTableIncorrectTable () throws IOException {
         //given
-        in.addInput("connect tracklist maksym");
+        in.addInput("connect newtracklist maksym");
         in.addInput("password");
         in.addInput("clear tracks");
         in.addInput("close");
@@ -429,13 +455,13 @@ public class integrationTest {
                 "For help on a particular command type command following by \"?\"\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
-                "sqlCmd_> password: You have connected to DB:tracklist\n" +
+                "sqlCmd_> password: You have connected to DB:newtracklist\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> org.postgresql.util.PSQLException: ERROR: relation \"tracks\" does not exist\n" +
+                "sqlCmd/newtracklist/_> org.postgresql.util.PSQLException: ERROR: relation \"tracks\" does not exist\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" tracklist \" closed\n" +
+                "sqlCmd/newtracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" newtracklist \" closed\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
                 "sqlCmd_> You are about to close the progran, please confirm (Y/N): Programm successfully closed\n";
@@ -447,7 +473,7 @@ public class integrationTest {
     @Test
     public void testDropIncorrectFormat () throws IOException {
         //given
-        in.addInput("connect tracklist maksym");
+        in.addInput("connect newtracklist maksym");
         in.addInput("password");
         in.addInput("drop");
         in.addInput("close");
@@ -462,13 +488,13 @@ public class integrationTest {
                 "For help on a particular command type command following by \"?\"\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
-                "sqlCmd_> password: You have connected to DB:tracklist\n" +
+                "sqlCmd_> password: You have connected to DB:newtracklist\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> Incorrect format, please type \"help\" for help\n" +
+                "sqlCmd/newtracklist/_> Incorrect format, please type \"help\" for help\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" tracklist \" closed\n" +
+                "sqlCmd/newtracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" newtracklist \" closed\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
                 "sqlCmd_> You are about to close the progran, please confirm (Y/N): Programm successfully closed\n";
@@ -479,7 +505,7 @@ public class integrationTest {
     @Test
     public void testDropIncorrectTable () throws IOException {
         //given
-        in.addInput("connect tracklist maksym");
+        in.addInput("connect newtracklist maksym");
         in.addInput("password");
         in.addInput("drop tracks");
         in.addInput("close");
@@ -494,13 +520,13 @@ public class integrationTest {
                 "For help on a particular command type command following by \"?\"\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
-                "sqlCmd_> password: You have connected to DB:tracklist\n" +
+                "sqlCmd_> password: You have connected to DB:newtracklist\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> org.postgresql.util.PSQLException: ERROR: table \"tracks\" does not exist\n" +
+                "sqlCmd/newtracklist/_> org.postgresql.util.PSQLException: ERROR: table \"tracks\" does not exist\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" tracklist \" closed\n" +
+                "sqlCmd/newtracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" newtracklist \" closed\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
                 "sqlCmd_> You are about to close the progran, please confirm (Y/N): Programm successfully closed\n";
@@ -514,7 +540,7 @@ public class integrationTest {
     @Test
     public void testInsertIncorrectFormat () throws IOException {
         //given
-        in.addInput("connect tracklist maksym");
+        in.addInput("connect newtracklist maksym");
         in.addInput("password");
         in.addInput("create tracks track_name|text track_id|int");
         in.addInput("insert");
@@ -531,19 +557,19 @@ public class integrationTest {
                 "For help on a particular command type command following by \"?\"\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
-                "sqlCmd_> password: You have connected to DB:tracklist\n" +
+                "sqlCmd_> password: You have connected to DB:newtracklist\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> DB \"tracks\" has been created\n" +
+                "sqlCmd/newtracklist/_> DB \"tracks\" has been created\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> Incorrect command format, please type \"help\" for help\n" +
+                "sqlCmd/newtracklist/_> Incorrect command format, please type \"help\" for help\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> Table \"tracks\" has been deleted\n" +
+                "sqlCmd/newtracklist/_> Table \"tracks\" has been deleted\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" tracklist \" closed\n" +
+                "sqlCmd/newtracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" newtracklist \" closed\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
                 "sqlCmd_> You are about to close the progran, please confirm (Y/N): Programm successfully closed\n";
@@ -555,7 +581,7 @@ public class integrationTest {
     @Test
     public void testInsertIncorrectValue () throws IOException {
         //given
-        in.addInput("connect tracklist maksym");
+        in.addInput("connect newtracklist maksym");
         in.addInput("password");
         in.addInput("create tracks track_name|text track_id|int");
         in.addInput("insert tracks track_name|21 track_id|text");
@@ -572,22 +598,22 @@ public class integrationTest {
                 "For help on a particular command type command following by \"?\"\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
-                "sqlCmd_> password: You have connected to DB:tracklist\n" +
+                "sqlCmd_> password: You have connected to DB:newtracklist\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> DB \"tracks\" has been created\n" +
+                "sqlCmd/newtracklist/_> DB \"tracks\" has been created\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> Something went wrong \n" +
+                "sqlCmd/newtracklist/_> Something went wrong \n" +
                 "java.sql.SQLException: Check data you entered\n" +
                 "org.postgresql.util.PSQLException: ERROR: column \"text\" does not exist\n" +
                 "  Position: 55\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> Table \"tracks\" has been deleted\n" +
+                "sqlCmd/newtracklist/_> Table \"tracks\" has been deleted\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" tracklist \" closed\n" +
+                "sqlCmd/newtracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" newtracklist \" closed\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
                 "sqlCmd_> You are about to close the progran, please confirm (Y/N): Programm successfully closed\n";
@@ -598,7 +624,7 @@ public class integrationTest {
     @Test
     public void testInsertIncorrectTable () throws IOException {
         //given
-        in.addInput("connect tracklist maksym");
+        in.addInput("connect newtracklist maksym");
         in.addInput("password");
         in.addInput("insert tracks1 track_name|21 track_id|text");
         in.addInput("close");
@@ -613,14 +639,14 @@ public class integrationTest {
                 "For help on a particular command type command following by \"?\"\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
-                "sqlCmd_> password: You have connected to DB:tracklist\n" +
+                "sqlCmd_> password: You have connected to DB:newtracklist\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> Something went wrong \n" +
+                "sqlCmd/newtracklist/_> Something went wrong \n" +
                 "java.lang.RuntimeException: Table \"tracks1\" does not exist\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" tracklist \" closed\n" +
+                "sqlCmd/newtracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" newtracklist \" closed\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
                 "sqlCmd_> You are about to close the progran, please confirm (Y/N): Programm successfully closed\n";
@@ -632,7 +658,7 @@ public class integrationTest {
     @Test
     public void testFind () throws IOException {
         //given
-        in.addInput("connect tracklist maksym");
+        in.addInput("connect newtracklist maksym");
         in.addInput("password");
         in.addInput("create tracks track_name|text track_id|int");
         in.addInput("insert tracks track_name|'track1' track_id|12");
@@ -651,29 +677,29 @@ public class integrationTest {
                 "For help on a particular command type command following by \"?\"\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
-                "sqlCmd_> password: You have connected to DB:tracklist\n" +
+                "sqlCmd_> password: You have connected to DB:newtracklist\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> DB \"tracks\" has been created\n" +
+                "sqlCmd/newtracklist/_> DB \"tracks\" has been created\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> Row was successfully inserted\n" +
+                "sqlCmd/newtracklist/_> Row was successfully inserted\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> Row was successfully inserted\n" +
+                "sqlCmd/newtracklist/_> Row was successfully inserted\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> \n" +
+                "sqlCmd/newtracklist/_> \n" +
                 "track_name  track_id  \n" +
                 "track1      12        \n" +
                 "track2      21        \n" +
                 "\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> Table \"tracks\" has been deleted\n" +
+                "sqlCmd/newtracklist/_> Table \"tracks\" has been deleted\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" tracklist \" closed\n" +
+                "sqlCmd/newtracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" newtracklist \" closed\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
                 "sqlCmd_> You are about to close the progran, please confirm (Y/N): Programm successfully closed\n";
@@ -684,7 +710,7 @@ public class integrationTest {
     @Test
     public void testFindIncorrectFormat () throws IOException {
         //given
-        in.addInput("connect tracklist maksym");
+        in.addInput("connect newtracklist maksym");
         in.addInput("password");
         in.addInput("find");
         in.addInput("close");
@@ -699,13 +725,13 @@ public class integrationTest {
                 "For help on a particular command type command following by \"?\"\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
-                "sqlCmd_> password: You have connected to DB:tracklist\n" +
+                "sqlCmd_> password: You have connected to DB:newtracklist\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> Incorrect command format, please type \"help\" for help\n" +
+                "sqlCmd/newtracklist/_> Incorrect command format, please type \"help\" for help\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" tracklist \" closed\n" +
+                "sqlCmd/newtracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" newtracklist \" closed\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
                 "sqlCmd_> You are about to close the progran, please confirm (Y/N): Programm successfully closed\n";
@@ -717,7 +743,7 @@ public class integrationTest {
     @Test
     public void testFindIncorrectName () throws IOException {
         //given
-        in.addInput("connect tracklist maksym");
+        in.addInput("connect newtracklist maksym");
         in.addInput("password");
         in.addInput("find tracks");
         in.addInput("close");
@@ -732,14 +758,14 @@ public class integrationTest {
                 "For help on a particular command type command following by \"?\"\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
-                "sqlCmd_> password: You have connected to DB:tracklist\n" +
+                "sqlCmd_> password: You have connected to DB:newtracklist\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> org.postgresql.util.PSQLException: ERROR: relation \"tracks\" does not exist\n" +
+                "sqlCmd/newtracklist/_> org.postgresql.util.PSQLException: ERROR: relation \"tracks\" does not exist\n" +
                 "  Position: 16\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" tracklist \" closed\n" +
+                "sqlCmd/newtracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" newtracklist \" closed\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
                 "sqlCmd_> You are about to close the progran, please confirm (Y/N): Programm successfully closed\n";
@@ -751,7 +777,7 @@ public class integrationTest {
     @Test
     public void testCreateTable () throws IOException {
         //given
-        in.addInput("connect tracklist maksym");
+        in.addInput("connect newtracklist maksym");
         in.addInput("password");
         in.addInput("create tracks track_name|text track_id|int");
         in.addInput("drop tracks");
@@ -767,16 +793,16 @@ public class integrationTest {
                 "For help on a particular command type command following by \"?\"\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
-                "sqlCmd_> password: You have connected to DB:tracklist\n" +
+                "sqlCmd_> password: You have connected to DB:newtracklist\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> DB \"tracks\" has been created\n" +
+                "sqlCmd/newtracklist/_> DB \"tracks\" has been created\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> Table \"tracks\" has been deleted\n" +
+                "sqlCmd/newtracklist/_> Table \"tracks\" has been deleted\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" tracklist \" closed\n" +
+                "sqlCmd/newtracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" newtracklist \" closed\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
                 "sqlCmd_> You are about to close the progran, please confirm (Y/N): Programm successfully closed\n";
@@ -787,7 +813,7 @@ public class integrationTest {
     @Test
     public void testDeleteValue () throws IOException {
         //given
-        in.addInput("connect tracklist maksym");
+        in.addInput("connect newtracklist maksym");
         in.addInput("password");
         in.addInput("create tracks track_name|text track_id|int");
         in.addInput("insert tracks track_name|'track1' track_id|12");
@@ -807,19 +833,19 @@ public class integrationTest {
                 "For help on a particular command type command following by \"?\"\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
-                "sqlCmd_> password: You have connected to DB:tracklist\n" +
+                "sqlCmd_> password: You have connected to DB:newtracklist\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> DB \"tracks\" has been created\n" +
+                "sqlCmd/newtracklist/_> DB \"tracks\" has been created\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> Row was successfully inserted\n" +
+                "sqlCmd/newtracklist/_> Row was successfully inserted\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> Row was successfully inserted\n" +
+                "sqlCmd/newtracklist/_> Row was successfully inserted\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> You are about to delete row that contains Value track_id = 12\n" +
+                "sqlCmd/newtracklist/_> You are about to delete row that contains Value track_id = 12\n" +
                 "Plese confirm (Y/N): Following row was deleted fron the table \"tracks:\n" +
                 "\n" +
                 "track_name  track_id  \n" +
@@ -827,10 +853,10 @@ public class integrationTest {
                 "\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> Table \"tracks\" has been deleted\n" +
+                "sqlCmd/newtracklist/_> Table \"tracks\" has been deleted\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" tracklist \" closed\n" +
+                "sqlCmd/newtracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" newtracklist \" closed\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
                 "sqlCmd_> You are about to close the progran, please confirm (Y/N): Programm successfully closed\n";
@@ -842,7 +868,7 @@ public class integrationTest {
     @Test
     public void testDeleteIncorrectFormat () throws IOException {
         //given
-        in.addInput("connect tracklist maksym");
+        in.addInput("connect newtracklist maksym");
         in.addInput("password");
         in.addInput("create tracks track_name|text track_id|int");
         in.addInput("insert tracks track_name|'track1' track_id|12");
@@ -862,28 +888,28 @@ public class integrationTest {
                 "For help on a particular command type command following by \"?\"\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
-                "sqlCmd_> password: You have connected to DB:tracklist\n" +
+                "sqlCmd_> password: You have connected to DB:newtracklist\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> DB \"tracks\" has been created\n" +
+                "sqlCmd/newtracklist/_> DB \"tracks\" has been created\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> Row was successfully inserted\n" +
+                "sqlCmd/newtracklist/_> Row was successfully inserted\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> Row was successfully inserted\n" +
+                "sqlCmd/newtracklist/_> Row was successfully inserted\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> Incorrect command format, please type \"help\" for help\n" +
+                "sqlCmd/newtracklist/_> Incorrect command format, please type \"help\" for help\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> This command is not supported, please type help for \"help\"\n" +
+                "sqlCmd/newtracklist/_> This command is not supported, please type help for \"help\"\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> Table \"tracks\" has been deleted\n" +
+                "sqlCmd/newtracklist/_> Table \"tracks\" has been deleted\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" tracklist \" closed\n" +
+                "sqlCmd/newtracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" newtracklist \" closed\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
                 "sqlCmd_> You are about to close the progran, please confirm (Y/N): Programm successfully closed\n";
@@ -894,7 +920,7 @@ public class integrationTest {
     @Test
     public void testDeleteIncorrectTable () throws IOException {
         //given
-        in.addInput("connect tracklist maksym");
+        in.addInput("connect newtracklist maksym");
         in.addInput("password");
         in.addInput("delete tracks track_id|12");
         in.addInput("Y");
@@ -910,16 +936,16 @@ public class integrationTest {
                 "For help on a particular command type command following by \"?\"\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
-                "sqlCmd_> password: You have connected to DB:tracklist\n" +
+                "sqlCmd_> password: You have connected to DB:newtracklist\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> You are about to delete row that contains Value track_id = 12\n" +
+                "sqlCmd/newtracklist/_> You are about to delete row that contains Value track_id = 12\n" +
                 "Plese confirm (Y/N): Something went wrong \n" +
                 "java.sql.SQLException: org.postgresql.util.PSQLException: ERROR: relation \"tracks\" does not exist\n" +
                 "  Position: 16\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" tracklist \" closed\n" +
+                "sqlCmd/newtracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" newtracklist \" closed\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
                 "sqlCmd_> You are about to close the progran, please confirm (Y/N): Programm successfully closed\n";
@@ -930,7 +956,7 @@ public class integrationTest {
     @Test
     public void testGetDataBaseName () throws IOException {
         //given
-        in.addInput("connect tracklist maksym");
+        in.addInput("connect newtracklist maksym");
         in.addInput("password");
         in.addInput("pwd");;
         in.addInput("close");
@@ -945,13 +971,13 @@ public class integrationTest {
                 "For help on a particular command type command following by \"?\"\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
-                "sqlCmd_> password: You have connected to DB:tracklist\n" +
+                "sqlCmd_> password: You have connected to DB:newtracklist\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> tracklist\n" +
+                "sqlCmd/newtracklist/_> newtracklist\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" tracklist \" closed\n" +
+                "sqlCmd/newtracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" newtracklist \" closed\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
                 "sqlCmd_> You are about to close the progran, please confirm (Y/N): Programm successfully closed\n";
@@ -962,7 +988,7 @@ public class integrationTest {
     @Test
     public void testListTables () throws IOException {
         //given
-        in.addInput("connect tracklist maksym");
+        in.addInput("connect newtracklist maksym");
         in.addInput("password");
         in.addInput("list");;
         in.addInput("close");
@@ -977,10 +1003,10 @@ public class integrationTest {
                 "For help on a particular command type command following by \"?\"\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
-                "sqlCmd_> password: You have connected to DB:tracklist\n" +
+                "sqlCmd_> password: You have connected to DB:newtracklist\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> On Data Base \" tracklist \" you can find this tables available: \n" +
+                "sqlCmd/newtracklist/_> On Data Base \" newtracklist \" you can find this tables available: \n" +
                 "+----------------+\n" +
                 "| 1 |    album   |\n" +
                 "+----------------+\n" +
@@ -992,7 +1018,7 @@ public class integrationTest {
                 "+----------------+\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" tracklist \" closed\n" +
+                "sqlCmd/newtracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" newtracklist \" closed\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
                 "sqlCmd_> You are about to close the progran, please confirm (Y/N): Programm successfully closed\n";
@@ -1003,7 +1029,7 @@ public class integrationTest {
     @Test
     public void testListTablesWrongInput () throws IOException {
         //given
-        in.addInput("connect tracklist maksym");
+        in.addInput("connect newtracklist maksym");
         in.addInput("password");
         in.addInput("list something");;
         in.addInput("close");
@@ -1018,13 +1044,13 @@ public class integrationTest {
                 "For help on a particular command type command following by \"?\"\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
-                "sqlCmd_> password: You have connected to DB:tracklist\n" +
+                "sqlCmd_> password: You have connected to DB:newtracklist\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> Incorrect command format, please type \"help\" for help\n" +
+                "sqlCmd/newtracklist/_> Incorrect command format, please type \"help\" for help\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" tracklist \" closed\n" +
+                "sqlCmd/newtracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" newtracklist \" closed\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
                 "sqlCmd_> You are about to close the progran, please confirm (Y/N): Programm successfully closed\n";
@@ -1035,7 +1061,7 @@ public class integrationTest {
     @Test
     public void testUpdateValue () throws IOException {
         //given
-        in.addInput("connect tracklist maksym");
+        in.addInput("connect newtracklist maksym");
         in.addInput("password");
         in.addInput("create tracks track_name|text track_id|int");
         in.addInput("insert tracks track_name|'track1' track_id|12");
@@ -1054,19 +1080,19 @@ public class integrationTest {
                 "For help on a particular command type command following by \"?\"\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
-                "sqlCmd_> password: You have connected to DB:tracklist\n" +
+                "sqlCmd_> password: You have connected to DB:newtracklist\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> DB \"tracks\" has been created\n" +
+                "sqlCmd/newtracklist/_> DB \"tracks\" has been created\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> Row was successfully inserted\n" +
+                "sqlCmd/newtracklist/_> Row was successfully inserted\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> Row was successfully inserted\n" +
+                "sqlCmd/newtracklist/_> Row was successfully inserted\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> Following row will be modified:\n" +
+                "sqlCmd/newtracklist/_> Following row will be modified:\n" +
                 "track_name  track_id  \n" +
                 "track1      12        \n" +
                 "\n" +
@@ -1076,10 +1102,10 @@ public class integrationTest {
                 "\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> Table \"tracks\" has been deleted\n" +
+                "sqlCmd/newtracklist/_> Table \"tracks\" has been deleted\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" tracklist \" closed\n" +
+                "sqlCmd/newtracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" newtracklist \" closed\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
                 "sqlCmd_> You are about to close the progran, please confirm (Y/N): Programm successfully closed\n";
@@ -1090,7 +1116,7 @@ public class integrationTest {
     @Test
     public void testUpdateValueWrongInput () throws IOException {
         //given
-        in.addInput("connect tracklist maksym");
+        in.addInput("connect newtracklist maksym");
         in.addInput("password");
         in.addInput("create tracks track_name|text track_id|int");
         in.addInput("insert tracks track_name|'track1' track_id|12");
@@ -1109,25 +1135,25 @@ public class integrationTest {
                 "For help on a particular command type command following by \"?\"\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
-                "sqlCmd_> password: You have connected to DB:tracklist\n" +
+                "sqlCmd_> password: You have connected to DB:newtracklist\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> DB \"tracks\" has been created\n" +
+                "sqlCmd/newtracklist/_> DB \"tracks\" has been created\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> Row was successfully inserted\n" +
+                "sqlCmd/newtracklist/_> Row was successfully inserted\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> Row was successfully inserted\n" +
+                "sqlCmd/newtracklist/_> Row was successfully inserted\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> Command format is wrong... Pleae type 'help' for help\n" +
+                "sqlCmd/newtracklist/_> Command format is wrong... Pleae type 'help' for help\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> Table \"tracks\" has been deleted\n" +
+                "sqlCmd/newtracklist/_> Table \"tracks\" has been deleted\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" tracklist \" closed\n" +
+                "sqlCmd/newtracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" newtracklist \" closed\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
                 "sqlCmd_> You are about to close the progran, please confirm (Y/N): Programm successfully closed\n";
@@ -1138,7 +1164,7 @@ public class integrationTest {
     @Test
     public void testCreateTableWrongFormat () throws IOException {
         //given
-        in.addInput("connect tracklist maksym");
+        in.addInput("connect newtracklist maksym");
         in.addInput("password");
         in.addInput("create");
         in.addInput("close");
@@ -1153,13 +1179,13 @@ public class integrationTest {
                 "For help on a particular command type command following by \"?\"\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
-                "sqlCmd_> password: You have connected to DB:tracklist\n" +
+                "sqlCmd_> password: You have connected to DB:newtracklist\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> Command format is wrong... Pleae type 'help' for help\n" +
+                "sqlCmd/newtracklist/_> Command format is wrong... Pleae type 'help' for help\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" tracklist \" closed\n" +
+                "sqlCmd/newtracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" newtracklist \" closed\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
                 "sqlCmd_> You are about to close the progran, please confirm (Y/N): Programm successfully closed\n";
@@ -1171,7 +1197,7 @@ public class integrationTest {
     @Test
     public void testCreateTableWrongData () throws IOException {
         //given
-        in.addInput("connect tracklist maksym");
+        in.addInput("connect newtracklist maksym");
         in.addInput("password");
         in.addInput("create tracks trak|anything");
         in.addInput("drop tracks");
@@ -1187,16 +1213,16 @@ public class integrationTest {
                 "For help on a particular command type command following by \"?\"\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
-                "sqlCmd_> password: You have connected to DB:tracklist\n" +
+                "sqlCmd_> password: You have connected to DB:newtracklist\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> java.lang.RuntimeException: This data type \"anything\" is not supported. Type \"help\" for help\n" +
+                "sqlCmd/newtracklist/_> java.lang.RuntimeException: This data type \"anything\" is not supported. Type \"help\" for help\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> org.postgresql.util.PSQLException: ERROR: table \"tracks\" does not exist\n" +
+                "sqlCmd/newtracklist/_> org.postgresql.util.PSQLException: ERROR: table \"tracks\" does not exist\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" tracklist \" closed\n" +
+                "sqlCmd/newtracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" newtracklist \" closed\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
                 "sqlCmd_> You are about to close the progran, please confirm (Y/N): Programm successfully closed\n";
@@ -1208,7 +1234,7 @@ public class integrationTest {
     @Test
     public void testUpdateValueWrongCondition () throws IOException {
         //given
-        in.addInput("connect tracklist maksym");
+        in.addInput("connect newtracklist maksym");
         in.addInput("password");
         in.addInput("create tracks track_name|text track_id|int");
         in.addInput("insert tracks track_name|'track1' track_id|12");
@@ -1227,29 +1253,29 @@ public class integrationTest {
                 "For help on a particular command type command following by \"?\"\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
-                "sqlCmd_> password: You have connected to DB:tracklist\n" +
+                "sqlCmd_> password: You have connected to DB:newtracklist\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> DB \"tracks\" has been created\n" +
+                "sqlCmd/newtracklist/_> DB \"tracks\" has been created\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> Row was successfully inserted\n" +
+                "sqlCmd/newtracklist/_> Row was successfully inserted\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> Row was successfully inserted\n" +
+                "sqlCmd/newtracklist/_> Row was successfully inserted\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> Following row will be modified:\n" +
+                "sqlCmd/newtracklist/_> Following row will be modified:\n" +
                 "track_name  track_id  \n" +
                 "\n" +
                 "Please check data you entered\n" +
                 "There is no such an values in this table\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> Table \"tracks\" has been deleted\n" +
+                "sqlCmd/newtracklist/_> Table \"tracks\" has been deleted\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" tracklist \" closed\n" +
+                "sqlCmd/newtracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" newtracklist \" closed\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
                 "sqlCmd_> You are about to close the progran, please confirm (Y/N): Programm successfully closed\n";
@@ -1260,7 +1286,7 @@ public class integrationTest {
     @Test
     public void testUpdateValueWrongValue () throws IOException {
         //given
-        in.addInput("connect tracklist maksym");
+        in.addInput("connect newtracklist maksym");
         in.addInput("password");
         in.addInput("create tracks track_name|text track_id|int");
         in.addInput("insert tracks track_name|'track1' track_id|12");
@@ -1279,19 +1305,19 @@ public class integrationTest {
                 "For help on a particular command type command following by \"?\"\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
-                "sqlCmd_> password: You have connected to DB:tracklist\n" +
+                "sqlCmd_> password: You have connected to DB:newtracklist\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> DB \"tracks\" has been created\n" +
+                "sqlCmd/newtracklist/_> DB \"tracks\" has been created\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> Row was successfully inserted\n" +
+                "sqlCmd/newtracklist/_> Row was successfully inserted\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> Row was successfully inserted\n" +
+                "sqlCmd/newtracklist/_> Row was successfully inserted\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> Following row will be modified:\n" +
+                "sqlCmd/newtracklist/_> Following row will be modified:\n" +
                 "track_name  track_id  \n" +
                 "track1      12        \n" +
                 "\n" +
@@ -1300,10 +1326,10 @@ public class integrationTest {
                 "  Position: 30\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> Table \"tracks\" has been deleted\n" +
+                "sqlCmd/newtracklist/_> Table \"tracks\" has been deleted\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" tracklist \" closed\n" +
+                "sqlCmd/newtracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" newtracklist \" closed\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
                 "sqlCmd_> You are about to close the progran, please confirm (Y/N): Programm successfully closed\n";
@@ -1315,7 +1341,7 @@ public class integrationTest {
     @Test
     public void testCloseWithoutY () throws IOException {
         //given
-        in.addInput("connect tracklist maksym");
+        in.addInput("connect newtracklist maksym");
         in.addInput("password");
         in.addInput("close");
         in.addInput("n");
@@ -1333,12 +1359,12 @@ public class integrationTest {
                 "For help on a particular command type command following by \"?\"\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
-                "sqlCmd_> password: You have connected to DB:tracklist\n" +
+                "sqlCmd_> password: You have connected to DB:newtracklist\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd/tracklist/_> You are about to close connection to DB, please confirm (Y/N): You are on connected mode\n" +
+                "sqlCmd/newtracklist/_> You are about to close connection to DB, please confirm (Y/N): You are on connected mode\n" +
                 "Type your command here\n" +
-                "sqlCmd_> You are about to close connection to DB, please confirm (Y/N): Please select only Y or N: Please select only Y or N: Connection to DB \" tracklist \" closed\n" +
+                "sqlCmd_> You are about to close connection to DB, please confirm (Y/N): Please select only Y or N: Please select only Y or N: Connection to DB \" newtracklist \" closed\n" +
                 "You are on an unconnected mode.\n" +
                 "Type your commend here\n" +
                 "sqlCmd_> You are about to close the progran, please confirm (Y/N): Programm successfully closed\n";

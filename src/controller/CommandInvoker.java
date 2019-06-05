@@ -6,6 +6,7 @@ import dataBase.DataBaseInterface;
 import dataBase.DataBaseOperations;
 import view.InputOutput;
 
+import java.sql.Array;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -50,6 +51,8 @@ public class CommandInvoker {
         commands.add(new InsertRow(this.dataBase, this.inputOutput));
         commands.add(new listTables(this.dataBase, this.inputOutput));
         commands.add(new UpdateValue(this.dataBase, this.inputOutput));
+        commands.add(new CreateDB(this.dataBase, this.inputOutput));
+        commands.add(new DropDB(this.dataBase, this.inputOutput));
     }
 
     public void start () {
@@ -104,7 +107,7 @@ public class CommandInvoker {
                 inputOutput.outputln("You are on connected mode");
                 inputOutput.outputln("Type your command here");
                 userInput = new ArrayList<String>(Arrays.asList(inputOutput.input(prompt).split(" +")));
-                for (Command command: commands) {
+                for (Command command : commands) {
                     if (command.isExecutable(userInput)) {
                         executed = true;
                         command.execute(userInput);
@@ -114,7 +117,9 @@ public class CommandInvoker {
                         }
                     }
                 }
-                if (!executed) {inputOutput.outputln("This command is not supported, please type help for \"help\"");}
+                if (!executed) {
+                    inputOutput.outputln("This command is not supported, please type help for \"help\"");
+                }
 
             }
 

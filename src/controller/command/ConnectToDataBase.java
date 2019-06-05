@@ -19,31 +19,31 @@ public class ConnectToDataBase implements Command {
 
     @Override
     public boolean isExecutable(ArrayList<String> command) {
-        if (!command.get(0).equals("connect") || command.size() != 3) {
-            console.outputln("Incorrect command format, please type \"help\" for help");
-            return false;
-        }
-        else {return true;}
+        if (command.get(0).equals("connect")) {return true;}
+        return false;
     }
 
     @Override
     public void execute(ArrayList<String> command) {
-        this.setPassword();
-        try {
-            dataBase.connectToDataBase(command.get(1), command.get(2), userPassword);
-            if (dataBase.isConnected()) {
-                console.outputln("You have connected to DB:" + command.get(1));
-            } else {
-                //here works exception
+        if (command.size() != 3) {
+            console.outputln("Incorrect command format, please type \"help\" for help");
+        } else {
+            this.setPassword();
+            try {
+                dataBase.connectToDataBase(command.get(1), command.get(2), userPassword);
+                if (dataBase.isConnected()) {
+                    console.outputln("You have connected to DB:" + command.get(1));
+                } else {
+                    //here works exception
+                }
+            } catch (Exception e) {
+                console.outputln(e.getMessage());
             }
-        } catch (Exception e) {
-            console.outputln(e.getMessage());
         }
 
     }
 
     private void setPassword () {
-        if (debug) {this.userPassword = console.input("password: ");}
-        else {this.userPassword = String.valueOf(this.console.inputPassword());}
+        this.userPassword = this.console.inputPassword();
     }
 }

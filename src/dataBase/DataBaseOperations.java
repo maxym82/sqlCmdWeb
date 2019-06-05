@@ -300,12 +300,40 @@ public class DataBaseOperations implements DataBaseInterface {
     @Override
     public boolean closeConnection() throws SQLException {
         try {
-            connection.close();
+            if (connection != null) {connection.close();}
             connection = null;
             return true;
         } catch (SQLException e) {
             throw new SQLException(e);
         }
+    }
+
+    @Override
+    public boolean createDB(String dbName) throws SQLException {
+        if (connection != null) {
+            try {
+                Statement statement = this.connection.createStatement();
+                statement.executeUpdate("CREATE DATABASE " + dbName);
+                statement.close();
+            } catch (Exception e) {
+                throw new SQLException(e.getMessage());
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean dropDB(String dbName) throws SQLException {
+        if (connection != null) {
+            try {
+                Statement statement = this.connection.createStatement();
+                statement.executeUpdate("DROP DATABASE " + dbName);
+                statement.close();
+            } catch (Exception e) {
+                throw new SQLException(e.getMessage());
+            }
+        }
+        return true;
     }
 
 }
