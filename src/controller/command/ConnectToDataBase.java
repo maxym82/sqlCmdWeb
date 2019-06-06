@@ -19,8 +19,7 @@ public class ConnectToDataBase implements Command {
 
     @Override
     public boolean isExecutable(ArrayList<String> command) {
-        if (command.get(0).equals("connect")) {return true;}
-        return false;
+        return true;
     }
 
     @Override

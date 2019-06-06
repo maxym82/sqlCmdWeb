@@ -1,6 +1,8 @@
 package dataBase;
 
-import org.junit.*;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import java.sql.SQLException;
 
@@ -15,7 +17,7 @@ public class DataBaseOperationsTest {
 
     @BeforeClass
     public static void setup() throws SQLException {
-        operations.connectToDataBase("tracklist", "maksym", "password");
+        operations.connectToDataBase("maksym", "maksym", "password");
         operations.createDB("newtracklist");
         operations.closeConnection();
         operations.connectToDataBase("newtracklist", "maksym", "password");
@@ -27,7 +29,7 @@ public class DataBaseOperationsTest {
     @AfterClass
     public static void close() throws SQLException {
         operations.closeConnection();
-        operations.connectToDataBase("tracklist", "maksym", "password");
+        operations.connectToDataBase("maksym", "maksym", "password");
         operations.dropDB("newTrackList");
         operations.closeConnection();
     }
@@ -61,7 +63,20 @@ public class DataBaseOperationsTest {
     }
 
     @Test
-    public void createDBTest() {
+    public void createDBTestWrong() {
+        try {
+            assertTrue(!operations.createDB("newtracklist"));
+        } catch (SQLException e) { //do nothing, this is wat is expected
+        }
+    }
+
+    @Test
+    public void dropDBTestWrong() {
+        try {
+            assertTrue(!operations.dropDB("noSuchDB"));
+        } catch (SQLException e) { // do nothing, this is wat is expected
+
+        }
     }
 
     @Test

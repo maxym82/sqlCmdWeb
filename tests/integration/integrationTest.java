@@ -26,7 +26,7 @@ public class integrationTest {
         System.setIn(in);
         System.setOut(new PrintStream(out));
 
-        in.addInput("connect tracklist maksym");
+        in.addInput("connect maksym maksym");
         in.addInput("password");
         in.addInput("make newtracklist");
         in.addInput("close");
@@ -39,7 +39,7 @@ public class integrationTest {
 
     @AfterClass
     public static void deleteEnv () {
-        in.addInput("connect tracklist maksym");
+        in.addInput("connect maksym maksym");
         in.addInput("password");
         in.addInput("erase newtracklist");
         in.addInput("close");
@@ -149,6 +149,169 @@ public class integrationTest {
                 "      For example (update table1 column1|'roadHouse' column2|123) in this case row with value        'roadHouse' on a column1 will be found and column2's value of this row will be changed to 123\n" +
                 "12. make. To create new database\n" +
                 "      Format: make [database_name]\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/newtracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" newtracklist \" closed\n" +
+                "You are on an unconnected mode.\n" +
+                "Type your commend here\n" +
+                "sqlCmd_> You are about to close the progran, please confirm (Y/N): Programm successfully closed\n";
+
+        assertEquals(outputPattern, out.getData());
+    }
+
+    @Test
+    public void testUsupportedCommand () throws IOException {
+        //given
+        in.addInput("connect newtracklist maksym");
+        in.addInput("password");
+        in.addInput("anycommand");
+        in.addInput("close");
+        in.addInput("Y");
+        in.addInput("exit");
+        in.addInput("y");
+        //when
+        Main.main(new String[0]);
+        //then
+        String outputPattern = "Welcome to sqlCmd.\n" +
+                "For list of commands available type help.\n" +
+                "For help on a particular command type command following by \"?\"\n" +
+                "You are on an unconnected mode.\n" +
+                "Type your commend here\n" +
+                "sqlCmd_> password: You have connected to DB:newtracklist\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/newtracklist/_> This command is not supported, please type help for \"help\"\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/newtracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" newtracklist \" closed\n" +
+                "You are on an unconnected mode.\n" +
+                "Type your commend here\n" +
+                "sqlCmd_> You are about to close the progran, please confirm (Y/N): Programm successfully closed\n";
+
+        assertEquals(outputPattern, out.getData());
+    }
+
+
+
+    @Test
+    public void testCreateDBWrongFormat () throws IOException {
+        //given
+        in.addInput("connect newtracklist maksym");
+        in.addInput("password");
+        in.addInput("make");
+        in.addInput("close");
+        in.addInput("Y");
+        in.addInput("exit");
+        in.addInput("Y");
+        //when
+        Main.main(new String[0]);
+        //then
+        String outputPattern = "Welcome to sqlCmd.\n" +
+                "For list of commands available type help.\n" +
+                "For help on a particular command type command following by \"?\"\n" +
+                "You are on an unconnected mode.\n" +
+                "Type your commend here\n" +
+                "sqlCmd_> password: You have connected to DB:newtracklist\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/newtracklist/_> Command format is wrong... Pleae type 'help' for help\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/newtracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" newtracklist \" closed\n" +
+                "You are on an unconnected mode.\n" +
+                "Type your commend here\n" +
+                "sqlCmd_> You are about to close the progran, please confirm (Y/N): Programm successfully closed\n";
+
+        assertEquals(outputPattern, out.getData());
+    }
+
+    @Test
+    public void testCreateDBAlreadyExist () throws IOException {
+        //given
+        in.addInput("connect newtracklist maksym");
+        in.addInput("password");
+        in.addInput("make newtracklist");
+        in.addInput("close");
+        in.addInput("Y");
+        in.addInput("exit");
+        in.addInput("Y");
+        //when
+        Main.main(new String[0]);
+        //then
+        String outputPattern = "Welcome to sqlCmd.\n" +
+                "For list of commands available type help.\n" +
+                "For help on a particular command type command following by \"?\"\n" +
+                "You are on an unconnected mode.\n" +
+                "Type your commend here\n" +
+                "sqlCmd_> password: You have connected to DB:newtracklist\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/newtracklist/_> java.sql.SQLException: ERROR: database \"newtracklist\" already exists\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/newtracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" newtracklist \" closed\n" +
+                "You are on an unconnected mode.\n" +
+                "Type your commend here\n" +
+                "sqlCmd_> You are about to close the progran, please confirm (Y/N): Programm successfully closed\n";
+
+        assertEquals(outputPattern, out.getData());
+    }
+
+    @Test
+    public void dropDBWrongFormat () throws IOException {
+        //given
+        in.addInput("connect newtracklist maksym");
+        in.addInput("password");
+        in.addInput("erase");
+        in.addInput("close");
+        in.addInput("Y");
+        in.addInput("exit");
+        in.addInput("Y");
+        //when
+        Main.main(new String[0]);
+        //then
+        String outputPattern = "Welcome to sqlCmd.\n" +
+                "For list of commands available type help.\n" +
+                "For help on a particular command type command following by \"?\"\n" +
+                "You are on an unconnected mode.\n" +
+                "Type your commend here\n" +
+                "sqlCmd_> password: You have connected to DB:newtracklist\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/newtracklist/_> Command format is wrong... Pleae type 'help' for help\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/newtracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" newtracklist \" closed\n" +
+                "You are on an unconnected mode.\n" +
+                "Type your commend here\n" +
+                "sqlCmd_> You are about to close the progran, please confirm (Y/N): Programm successfully closed\n";
+
+        assertEquals(outputPattern, out.getData());
+    }
+
+
+    @Test
+    public void dropDBWDoesNotExist () throws IOException {
+        //given
+        in.addInput("connect newtracklist maksym");
+        in.addInput("password");
+        in.addInput("erase anyDBxxxxx");
+        in.addInput("close");
+        in.addInput("Y");
+        in.addInput("exit");
+        in.addInput("Y");
+        //when
+        Main.main(new String[0]);
+        //then
+        String outputPattern = "Welcome to sqlCmd.\n" +
+                "For list of commands available type help.\n" +
+                "For help on a particular command type command following by \"?\"\n" +
+                "You are on an unconnected mode.\n" +
+                "Type your commend here\n" +
+                "sqlCmd_> password: You have connected to DB:newtracklist\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/newtracklist/_> java.sql.SQLException: ERROR: database \"anydbxxxxx\" does not exist\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
                 "sqlCmd/newtracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" newtracklist \" closed\n" +
@@ -986,7 +1149,7 @@ public class integrationTest {
     }
 
     @Test
-    public void testListTables () throws IOException {
+    public void testListTablesWhenEmpty () throws IOException {
         //given
         in.addInput("connect newtracklist maksym");
         in.addInput("password");
@@ -1007,15 +1170,61 @@ public class integrationTest {
                 "You are on connected mode\n" +
                 "Type your command here\n" +
                 "sqlCmd/newtracklist/_> On Data Base \" newtracklist \" you can find this tables available: \n" +
-                "+----------------+\n" +
-                "| 1 |    album   |\n" +
-                "+----------------+\n" +
+                "No tables available. DB is empty\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/newtracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" newtracklist \" closed\n" +
+                "You are on an unconnected mode.\n" +
+                "Type your commend here\n" +
+                "sqlCmd_> You are about to close the progran, please confirm (Y/N): Programm successfully closed\n";
+
+        assertEquals(outputPattern, out.getData());
+    }
+
+    @Test
+    public void testListTables () throws IOException {
+        //given
+        in.addInput("connect newtracklist maksym");
+        in.addInput("password");
+        in.addInput("create tracks track_name|text track_id|int");
+        in.addInput("create artists artist_name|text artist_id|int");
+        in.addInput("list");
+        in.addInput("drop tracks");
+        in.addInput("drop artists");
+        in.addInput("close");
+        in.addInput("Y");
+        in.addInput("exit");
+        in.addInput("y");
+        //when
+        Main.main(new String[0]);
+        //then
+        String outputPattern = "Welcome to sqlCmd.\n" +
+                "For list of commands available type help.\n" +
+                "For help on a particular command type command following by \"?\"\n" +
+                "You are on an unconnected mode.\n" +
+                "Type your commend here\n" +
+                "sqlCmd_> password: You have connected to DB:newtracklist\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/newtracklist/_> DB \"tracks\" has been created\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/newtracklist/_> DB \"artists\" has been created\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/newtracklist/_> On Data Base \" newtracklist \" you can find this tables available: \n" +
                 "+------------------+\n" +
-                "| 2 |    artists   |\n" +
+                "| 1 |    artists   |\n" +
                 "+------------------+\n" +
-                "+----------------+\n" +
-                "| 3 |    songs   |\n" +
-                "+----------------+\n" +
+                "+-----------------+\n" +
+                "| 2 |    tracks   |\n" +
+                "+-----------------+\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/newtracklist/_> Table \"tracks\" has been deleted\n" +
+                "You are on connected mode\n" +
+                "Type your command here\n" +
+                "sqlCmd/newtracklist/_> Table \"artists\" has been deleted\n" +
                 "You are on connected mode\n" +
                 "Type your command here\n" +
                 "sqlCmd/newtracklist/_> You are about to close connection to DB, please confirm (Y/N): Connection to DB \" newtracklist \" closed\n" +

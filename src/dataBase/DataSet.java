@@ -10,10 +10,10 @@ public class DataSet implements DataSetInterface {
         dataSet.put(key, value);
     }
 
-    @Override
-    public int size() {
-        return dataSet.size();
-    }
+//    @Override
+//    public int size() {
+//        return dataSet.size();
+//    }
 
     @Override
     public List<Object> getAllData() {
@@ -25,19 +25,19 @@ public class DataSet implements DataSetInterface {
         return dataSet.keySet();
     }
 
-    @Override
-    public Object getValue(String key) {
-        return dataSet.get(key);
-    }
+//    @Override
+//    public Object getValue(String key) {
+//        return dataSet.get(key);
+//    }
 
-    @Override
-    public void updateDataFrom(DataSetInterface newValue) {
-        Set<String> columns = newValue.getKeys();
-        for (String name : columns) {
-            Object data = newValue.getValue(name);
-            put(name, data);
-        }
-    }
+//    @Override
+//    public void updateDataFrom(DataSetInterface newValue) {
+//        Set<String> columns = newValue.getKeys();
+//        for (String name : columns) {
+//            Object data = newValue.getValue(name);
+//            put(name, data);
+//        }
+//    }
 
     @Override
     public Iterable<Map.Entry<String, Object>> entrySet() {
