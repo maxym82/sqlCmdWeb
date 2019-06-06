@@ -26,7 +26,7 @@ public class integrationTest {
         System.setIn(in);
         System.setOut(new PrintStream(out));
 
-        in.addInput("connect maksym maksym");
+        in.addInput("connect tracklist maksym");
         in.addInput("password");
         in.addInput("make newtracklist");
         in.addInput("close");
@@ -39,7 +39,7 @@ public class integrationTest {
 
     @AfterClass
     public static void deleteEnv () {
-        in.addInput("connect maksym maksym");
+        in.addInput("connect tracklist maksym");
         in.addInput("password");
         in.addInput("erase newtracklist");
         in.addInput("close");
