@@ -1,11 +1,13 @@
 package contraller.command;
 
-import contraller.TestView;
 import controller.Command;
 import controller.command.CloseConnection;
 import dataBase.DataBaseInterface;
 import dataBase.DataBaseOperations;
 import org.junit.Test;
+
+import static org.mockito.Mockito.*;
+
 import org.mockito.Mockito;
 import view.View;
 
@@ -17,9 +19,10 @@ import static org.junit.Assert.assertFalse;
 
 public class TestClose {
 
-    private View view = Mockito.mock(View.class);
+    private View view = mock(View.class);
 
     private DataBaseInterface dataBase = new DataBaseOperations();
+    private DataBaseInterface spyDataBase = Mockito.spy(dataBase);
 
 
     @Test
@@ -50,8 +53,8 @@ public class TestClose {
         assertFalse(executable);
     }
 
-    @Test (expected = SQLException.class)
-    public void testExitRunBeforeConnect () {
+    @Test
+    public void testExitRunBeforeConnect() {
         //given
         Command command = new CloseConnection(dataBase, view);
 
@@ -60,9 +63,29 @@ public class TestClose {
         ArrayList<String> userCommand = new ArrayList<>();
         userCommand.add("close");
 
+        when(view.input("You are about to close connection to DB, please confirm (Y/N): ")).thenReturn("y");
         command.execute(userCommand);
 
+
         //then
+
+        Mockito.verify(view).outputln("Connection to DB \" null \" closed");
+
+    }
+
+    @Test
+    public void testCloseException() throws SQLException {
+        Command command = new CloseConnection(spyDataBase, view);
+
+        ArrayList<String> userCommand = new ArrayList<>();
+        userCommand.add("close");
+
+        when(view.input("You are about to close connection to DB, please confirm (Y/N): ")).thenReturn("y");
+        when(spyDataBase.closeConnection()).thenThrow(new SQLException("there is a problem ocure trying to close connection"));
+
+        command.execute(userCommand);
+
+        Mockito.verify(view).outputln("there is a problem ocure trying to close connection");
 
     }
 

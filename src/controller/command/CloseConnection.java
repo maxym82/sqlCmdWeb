@@ -35,7 +35,7 @@ public class CloseConnection implements Command {
                     }
                 } catch (Exception e) {
                     console.outputln(e.getMessage());
-                }
+                    return;}
             } else if (userInput.equals("N")) {
                 return;
             } else {userInput = console.input("Please select only Y or N: ").toUpperCase();}

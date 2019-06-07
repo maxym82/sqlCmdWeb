@@ -6,7 +6,6 @@ import dataBase.DataBaseInterface;
 import dataBase.DataBaseOperations;
 import view.InputOutput;
 
-import java.sql.Array;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -49,7 +48,7 @@ public class CommandInvoker {
         commands.add(new GetDataBaseName(this.dataBase, this.inputOutput));
         commands.add(new Help(this.inputOutput));
         commands.add(new InsertRow(this.dataBase, this.inputOutput));
-        commands.add(new listTables(this.dataBase, this.inputOutput));
+        commands.add(new ListTables(this.dataBase, this.inputOutput));
         commands.add(new UpdateValue(this.dataBase, this.inputOutput));
         commands.add(new CreateDB(this.dataBase, this.inputOutput));
         commands.add(new DropDB(this.dataBase, this.inputOutput));

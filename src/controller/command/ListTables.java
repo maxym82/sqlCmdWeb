@@ -6,12 +6,13 @@ import view.View;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
-public class listTables implements Command {
+public class ListTables implements Command {
     private DataBaseInterface dataBase;
     private View console;
 
-    public listTables(DataBaseInterface dataBase, View console) {
+    public ListTables(DataBaseInterface dataBase, View console) {
         this.dataBase = dataBase;
         this.console = console;
     }
@@ -32,10 +33,11 @@ public class listTables implements Command {
             int counter = 1;
             console.outputln(String.format("On Data Base \" %s \" you can find this tables available: ", this.dataBase.getDataBaseName()));
             try {
-                if (dataBase.listTables().size() == 0) {
+                List<String> tables = dataBase.listTables();
+                if (tables.size() == 0) {
                     console.outputln("No tables available. DB is empty");
                 } else {
-                    for (String tableName : dataBase.listTables()) {
+                    for (String tableName : tables) {
                         console.outputln("+" + "-".repeat(tableName.length() + 11) + "+");
                         console.output("| " + counter++ + " |");
                         console.outputln("    " + tableName + "   |");
