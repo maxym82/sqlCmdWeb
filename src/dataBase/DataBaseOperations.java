@@ -1,8 +1,5 @@
 package dataBase;
 
-import javax.swing.plaf.synth.SynthOptionPaneUI;
-import java.net.SocketOption;
-import java.net.SocketPermission;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,7 +41,6 @@ public class DataBaseOperations implements DataBaseInterface {
                     listOfDb.close();
                 } catch (SQLException ex) {
                     throw new SQLException("something went wrong" + ex.getMessage());
-//                    ex.printStackTrace();
                 }
             }
         } catch (SQLException e) {

@@ -17,7 +17,7 @@ public class DataBaseOperationsTest {
 
     @BeforeClass
     public static void setup() throws SQLException {
-        operations.connectToDataBase("tracklist", "maksym", "password");
+        operations.connectToDataBase("maksym", "maksym", "password");
         operations.createDB("newtracklist");
         operations.closeConnection();
         operations.connectToDataBase("newtracklist", "maksym", "password");
@@ -29,7 +29,7 @@ public class DataBaseOperationsTest {
     @AfterClass
     public static void close() throws SQLException {
         operations.closeConnection();
-        operations.connectToDataBase("tracklist", "maksym", "password");
+        operations.connectToDataBase("maksym", "maksym", "password");
         operations.dropDB("newTrackList");
         operations.closeConnection();
     }
