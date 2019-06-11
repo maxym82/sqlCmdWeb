@@ -58,27 +58,7 @@ public class TestList {
     }
 
     @Test
-    public void testExitRunBeforeConnect() {
-        //given
-        Command command = new CloseConnection(dataBase, view);
-
-        //when
-
-        ArrayList<String> userCommand = new ArrayList<>();
-        userCommand.add("close");
-
-        when(view.input("You are about to close connection to DB, please confirm (Y/N): ")).thenReturn("y");
-        command.execute(userCommand);
-
-
-        //then
-
-        Mockito.verify(view).outputln("Connection to DB \" null \" closed");
-
-    }
-
-    @Test
-    public void testExitException() throws SQLException {
+    public void testListTables() throws SQLException {
         Command command = new ListTables(spyDataBase, view);
 
         ArrayList<String> userCommand = new ArrayList<>();

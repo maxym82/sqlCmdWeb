@@ -29,8 +29,7 @@ public class ConnectToDataBase implements Command {
         } else {
             this.setPassword();
             try {
-                dataBase.connectToDataBase(command.get(1), command.get(2), userPassword);
-                if (dataBase.isConnected()) {
+                if (dataBase.connectToDataBase(command.get(1), command.get(2), userPassword)) {
                     console.outputln("You have connected to DB:" + command.get(1));
                 } else {
                     //here works exception

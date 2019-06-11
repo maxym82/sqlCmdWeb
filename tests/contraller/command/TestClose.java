@@ -54,7 +54,7 @@ public class TestClose {
     }
 
     @Test
-    public void testExitRunBeforeConnect() {
+    public void testCloseRunBeforeConnect() {
         //given
         Command command = new CloseConnection(dataBase, view);
 
