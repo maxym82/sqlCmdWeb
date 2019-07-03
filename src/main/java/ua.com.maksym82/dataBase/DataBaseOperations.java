@@ -1,31 +1,25 @@
 package ua.com.maksym82.dataBase;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class DataBaseOperations implements DataBaseInterface {
     private String dataBaseName;
     private String dbURL = "jdbc:postgresql://localhost:5432/";
     private Connection connection = null;
-    private String username;
-    private String password;
+    private Properties prop = new Properties();
+    private final String[] dataTypes = new String[]{"BOOL", "CHAR", "VARCHAR", "TEXT", "SMALLINT", "INT", "SERIAL", "float", "DATE",
+            "TIME", "TIMESTAMP", "INTERVAL", "UUID", "Array", "JSON", "hstore"};
+
 
     public DataBaseOperations() {
-//        this.dataBaseName = dataBaseName;
-//        this.username = username;
-//        this.password = password;
-//        this.dbURL = this.dbURL + this.dataBaseName;
-//        this.connectToDataBase(this.username, this.password);
     }
 
     @Override
     public boolean isDBexist(String dbName) throws SQLException {
         try {
             ResultSet listOfDb = null;
-            if (this.connection != null) {
+            if (isConnected()) {
                 listOfDb = connection.getMetaData().getCatalogs();
                 while (listOfDb.next()) {
                     String nextDB = listOfDb.getString(1);
@@ -33,18 +27,12 @@ public class DataBaseOperations implements DataBaseInterface {
                         return true;
                     }
                 }
-            } else {
-                throw new SQLException("unable to create database connection");
             }
             if (listOfDb != null) {
-                try {
                     listOfDb.close();
-                } catch (SQLException ex) {
-                    throw new SQLException("something went wrong" + ex.getMessage());
                 }
-            }
-        } catch (SQLException e) {
-            throw new SQLException(e);
+            } catch (SQLException e) {
+            throw new SQLException("Something went wrong\n" + e.getMessage());
         }
         return false;
     }
@@ -58,12 +46,12 @@ public class DataBaseOperations implements DataBaseInterface {
     @Override
     public boolean connectToDataBase(String dataBaseName, String username, String password) throws SQLException {
         this.dataBaseName = dataBaseName;
-        this.username = username;
-        this.password = password;
+        this.prop.setProperty("user", username);
+        this.prop.setProperty("password", password);
         String dbURL = this.dbURL + this.dataBaseName;
         try {
             ResultSet listOfDb = null;
-            this.connection = DriverManager.getConnection(dbURL, this.username, this.password);
+            this.connection = DriverManager.getConnection(dbURL, prop);
             return true;
         } catch (SQLException e) {
             throw new SQLException("something went wrong, please check your database name, user name and password\n" + e.getMessage());
@@ -73,7 +61,7 @@ public class DataBaseOperations implements DataBaseInterface {
     @Override
     public List<String> listTables() throws SQLException {
         List<String> listOfTables = new ArrayList<>();
-        if (connection != null) {
+        if (isConnected()) {
             try {
                 DatabaseMetaData md = connection.getMetaData();
                 ResultSet rs = md.getTables(this.dataBaseName, null, "%", new String[]{"TABLE"});
@@ -92,7 +80,7 @@ public class DataBaseOperations implements DataBaseInterface {
 
     @Override
     public boolean clearTable(String tableName) throws SQLException {
-        if (connection != null) {
+        if (isConnected()) {
             try {
                 Statement stmt = connection.createStatement();
                 // Use TRUNCATE
@@ -111,7 +99,7 @@ public class DataBaseOperations implements DataBaseInterface {
 
     @Override
     public boolean dropTable(String tableName) throws SQLException {
-        if (connection != null) {
+        if (isConnected()) {
             String stringStatement = "DROP TABLE " + tableName;
             try {
                 Statement statement = connection.createStatement();
@@ -127,32 +115,32 @@ public class DataBaseOperations implements DataBaseInterface {
     }
 
     @Override
-    public boolean isConnected() {
-        if (connection != null) {
-            return true;
+    public boolean isConnected(){
+        try {
+            if (connection != null && !connection.isClosed()) {
+                return true;
+            }
+        }catch (SQLException e) {
+            return false;
         }
         return false;
     }
 
 
     @Override
-    public boolean createTable(String tableName, DataSetInterface newTable) throws SQLException {
-        String[] dataTypes = new String[]{"BOOL", "CHAR", "VARCHAR", "TEXT", "SMALLINT", "INT", "SERIAL", "float", "DATE",
-                "TIME", "TIMESTAMP", "INTERVAL", "UUID", "Array", "JSON", "hstore"};
-        if (this.connection != null) {
+    public boolean createTable(String tableName, Map<String, Object> newTable) throws SQLException {
+        if (isConnected()) {
             String statementString = "CREATE TABLE public." + tableName + " (";
             for (Map.Entry<String, Object> row : newTable.entrySet()) {
-                if (Arrays.stream(dataTypes).anyMatch(row.getValue().toString().toUpperCase()::equals)) {
+                if (Arrays.stream(this.dataTypes).anyMatch(row.getValue().toString().toUpperCase()::equals)) {
                     statementString = statementString + row.getKey() + " " + row.getValue().toString().toUpperCase() + " NOT NULL, ";
                 } else {
                     throw new RuntimeException("This data type \"" + row.getValue().toString() + "\" is not supported. Type \"help\" for help");
                 }
             }
             statementString = statementString.substring(0, statementString.length() - 2) + ")";
-            //System.out.println(statementString);
             try {
                 Statement statement = this.connection.createStatement();
-//                System.out.println(statementString);
                 statement.execute(statementString);
                 statement.close();
                 return true;
@@ -163,11 +151,6 @@ public class DataBaseOperations implements DataBaseInterface {
         } else {
             return false;
         }
-    }
-
-    private String getColumnNames(Map data) {
-        String columnName = "";
-        return columnName;
     }
 
     public List<List<String>> findTable(String tableName) throws SQLException {
@@ -181,7 +164,7 @@ public class DataBaseOperations implements DataBaseInterface {
         String newCondition;
         List<List<String>> resultTable = new ArrayList<List<String>>();
         ResultSetMetaData rsmd;
-        if (connection != null) {
+        if (isConnected()) {
             if (!(condition == null || condition.equals(""))) {
                 newCondition = " WHERE " + condition;
             } else {
@@ -221,21 +204,21 @@ public class DataBaseOperations implements DataBaseInterface {
     }
 
     @Override
-    public boolean insertROW(String tableName, DataSetInterface newRow) throws SQLException {
+    public boolean insertROW(String tableName, Map<String, Object> newRow) throws SQLException {
         String statementString = "INSERT INTO " + tableName + " (";
-        if (connection != null) {
+        if (isConnected()) {
             DatabaseMetaData dbmd = connection.getMetaData();
             ResultSet tables = dbmd.getTables(null, null, tableName, null);
             if (!tables.next()) {
                 throw new RuntimeException("Table \"" + tableName + "\" does not exist");
             } else {
-                for (String rowName : newRow.getKeys()) {
+                for (String rowName : newRow.keySet()) {
                     statementString = statementString + rowName + ", ";
 
                 }
                 statementString = statementString.substring(0, statementString.length() - 2) + ") VALUES (";
 
-                for (Object rowValue : newRow.getAllData()) {
+                for (Object rowValue : newRow.values()) {
                     statementString = statementString + rowValue.toString() + ", ";
                 }
                 statementString = statementString.substring(0, statementString.length() - 2) + ")";
@@ -261,7 +244,7 @@ public class DataBaseOperations implements DataBaseInterface {
     public List<List<String>> updateValue(String tableName, String lookupValues, String newValues) throws SQLException {
         List<List<String>> updatedRow = new ArrayList<List<String>>();
         String statementString = "UPDATE " + tableName + " SET " + newValues + " WHERE " + lookupValues;
-        if (connection != null) {
+        if (isConnected()) {
             try {
                 Statement statement = connection.createStatement();
                 ResultSet resalt = statement.executeQuery("SELECT  * from " + tableName + " WHERE " + lookupValues);
@@ -279,7 +262,7 @@ public class DataBaseOperations implements DataBaseInterface {
     @Override
     public List<List<String>> deleteValue(String tableName, String lookupValues) throws SQLException {
         List<List<String>> rowToPrint = new ArrayList<List<String>>();
-        if (connection != null) {
+        if (isConnected()) {
             try {
                 rowToPrint = this.findTable(tableName, lookupValues);
 
@@ -296,7 +279,7 @@ public class DataBaseOperations implements DataBaseInterface {
     @Override
     public boolean closeConnection() throws SQLException {
         try {
-            if (connection != null) {connection.close();}
+            if (isConnected()) {connection.close();}
             connection = null;
             return true;
         } catch (SQLException e) {
@@ -306,7 +289,7 @@ public class DataBaseOperations implements DataBaseInterface {
 
     @Override
     public boolean createDB(String dbName) throws SQLException {
-        if (connection != null) {
+        if (isConnected()) {
             try {
                 Statement statement = this.connection.createStatement();
                 statement.executeUpdate("CREATE DATABASE " + dbName);
@@ -320,7 +303,7 @@ public class DataBaseOperations implements DataBaseInterface {
 
     @Override
     public boolean dropDB(String dbName) throws SQLException {
-        if (connection != null) {
+        if (isConnected()) {
             try {
                 Statement statement = this.connection.createStatement();
                 statement.executeUpdate("DROP DATABASE " + dbName);

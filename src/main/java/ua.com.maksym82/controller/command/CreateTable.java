@@ -2,11 +2,11 @@ package ua.com.maksym82.controller.command;
 
 import ua.com.maksym82.controller.Command;
 import ua.com.maksym82.dataBase.DataBaseInterface;
-import ua.com.maksym82.dataBase.DataSet;
-import ua.com.maksym82.dataBase.DataSetInterface;
 import ua.com.maksym82.view.View;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CreateTable implements Command {
     private DataBaseInterface dataBase;
@@ -28,7 +28,7 @@ public class CreateTable implements Command {
         if (command.size() < 2) {
             console.outputln("Command format is wrong... Pleae type \'help\' for help");
         } else {
-            DataSetInterface newTable = new DataSet();
+            Map<String, Object> newTable = new LinkedHashMap<>();
             //  create table1 column1|text column2|int
             for (String column: command.subList(2, command.size())) {
                 newTable.put(column.split("\\|")[0], column.split("\\|")[1]);

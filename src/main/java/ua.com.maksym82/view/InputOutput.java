@@ -44,6 +44,9 @@ public class InputOutput implements View {
 
     public static String formatAsTable(List<List<String>> rows)
     {
+        if (rows.size() == 0) {
+            return rows.toString();
+        }
         int[] maxLengths = new int[rows.get(0).size()];
         for (List<String> row : rows)
         {

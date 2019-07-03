@@ -4,10 +4,10 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import ua.com.maksym82.dataBase.DataBaseOperations;
-import ua.com.maksym82.dataBase.DataSet;
-import ua.com.maksym82.dataBase.DataSetInterface;
 
 import java.sql.SQLException;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertArrayEquals;
@@ -16,11 +16,11 @@ import static org.junit.Assert.assertTrue;
 public class DataBaseOperationsTest {
     private static DataBaseOperations operations = new DataBaseOperations();
     private static String tableName = "tracks";
-    private static DataSetInterface newTable = new DataSet();
+    private static Map<String, Object> newTable = new LinkedHashMap<>();
 
     @BeforeClass
     public static void setup() throws SQLException {
-        operations.connectToDataBase("maksym", "maksym", "password");
+        operations.connectToDataBase("tracklist", "maksym", "password");
         operations.createDB("newtracklist");
         operations.closeConnection();
         operations.connectToDataBase("newtracklist", "maksym", "password");
@@ -32,15 +32,15 @@ public class DataBaseOperationsTest {
     @AfterClass
     public static void close() throws SQLException {
         operations.closeConnection();
-        operations.connectToDataBase("maksym", "maksym", "password");
+        operations.connectToDataBase("tracklist", "maksym", "password");
         operations.dropDB("newTrackList");
         operations.closeConnection();
     }
 
     private void createTableWithValues() throws SQLException {
-        DataSetInterface newTable = new DataSet();
-        DataSetInterface row1 = new DataSet();
-        DataSetInterface row2 = new DataSet();
+        Map<String, Object> newTable = new LinkedHashMap<>();
+        Map<String, Object> row1 = new LinkedHashMap<>();
+        Map<String, Object> row2 = new LinkedHashMap<>();
         row1.put("track_name", "'track_1'");
         row1.put("track_id", 1);
         row2.put("track_name", "'track_2'");
@@ -83,7 +83,7 @@ public class DataBaseOperationsTest {
     }
 
     @Test
-    public void connectToDataBaseTest() {
+    public void connectToDataBaseTest() throws SQLException {
         assertTrue(operations.isConnected());
     }
 
@@ -109,7 +109,7 @@ public class DataBaseOperationsTest {
     }
 
     @Test
-    public void isConnectedTest() {
+    public void isConnectedTest() throws SQLException {
         assertTrue(operations.isConnected());
     }
 
@@ -130,7 +130,7 @@ public class DataBaseOperationsTest {
     @Test
     public void insertROWTest() throws SQLException {
         this.createTableWithValues();
-        DataSetInterface row3 = new DataSet();
+        Map<String, Object> row3 = new LinkedHashMap<>();
         row3.put("track_name", "'track_3'");
         row3.put("track_id", 3);
         assertTrue(operations.insertROW(this.tableName, row3));

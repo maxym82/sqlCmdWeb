@@ -2,11 +2,11 @@ package ua.com.maksym82.controller.command;
 
 import ua.com.maksym82.controller.Command;
 import ua.com.maksym82.dataBase.DataBaseInterface;
-import ua.com.maksym82.dataBase.DataSet;
-import ua.com.maksym82.dataBase.DataSetInterface;
 import ua.com.maksym82.view.View;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class InsertRow implements Command {
     private DataBaseInterface dataBase;
@@ -29,7 +29,7 @@ public class InsertRow implements Command {
         if (command.size() < 2) {
             console.outputln("Incorrect command format, please type \"help\" for help");
         } else {
-            DataSetInterface newRow = new DataSet();
+            Map<String, Object> newRow = new LinkedHashMap<>();
             for (String column: command.subList(2, command.size())) {
                 newRow.put(column.split("\\|")[0], column.split("\\|")[1]);
             }

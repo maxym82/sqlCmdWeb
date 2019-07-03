@@ -2,6 +2,7 @@ package ua.com.maksym82.dataBase;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 public interface DataBaseInterface {
 
@@ -19,11 +20,11 @@ public interface DataBaseInterface {
 
     boolean isConnected ();
 
-    boolean createTable(String tableName, DataSetInterface newTable) throws SQLException;
+    boolean createTable(String tableName, Map<String, Object> newTable) throws SQLException;
 
     List<List<String>> findTable(String tableName, String condition) throws SQLException;
 
-    boolean insertROW(String tableName, DataSetInterface newRow) throws SQLException;
+    boolean insertROW(String tableName, Map<String, Object> newRow) throws SQLException;
 
     List<List<String>> updateValue(String tableName, String condition, String newValue) throws SQLException;
 
