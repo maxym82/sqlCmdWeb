@@ -13,14 +13,14 @@ import static org.junit.Assert.assertEquals;
 public class integrationTest {
 
 
-    private static tests.integration.testInputStream in;
-    private static tests.integration.testOutputStream out;
+    private static testInputStream in;
+    private static testOutputStream out;
 
 
     @BeforeClass
     public static void createEnv () {
-        in = new tests.integration.testInputStream();
-        out = new tests.integration.testOutputStream();
+        in = new testInputStream();
+        out = new testOutputStream();
 
         System.setIn(in);
         System.setOut(new PrintStream(out));

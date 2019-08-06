@@ -1,4 +1,4 @@
-package tests.contraller.command;
+package contraller.command;
 
 import org.junit.Test;
 import org.mockito.Mockito;
