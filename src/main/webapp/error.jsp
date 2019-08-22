@@ -4,9 +4,7 @@
         <title>SQLCMDWEB</title>
     </head>
     <body>
-        <br>
-        <c:forEach items="${items}" var="item">
-            <a href="${item}">${item}</a> <br>
-        </c:forEach>
+        Something went wrong. ${message} <br>
+        <a href="menu">Menu</a><br>
     </body>
 </html>

@@ -1,5 +1,7 @@
 package ua.com.maksym82.controller.web;
 
+import ua.com.maksym82.dataBase.DataBaseInterface;
+import ua.com.maksym82.dataBase.DataBaseOperations;
 import ua.com.maksym82.service.ServiceInterface;
 import ua.com.maksym82.service.Service;
 
@@ -47,11 +49,11 @@ public class MainServlet extends HttpServlet {
 
         if (action.startsWith("/connect")) {
             String databaseName = req.getParameter("dbname");
-            String userName = req.getParameter("username");
+            String user = req.getParameter("user");
             String password = req.getParameter("password");
 
             try {
-                service.connect(databaseName, userName, password);
+                service.connect(databaseName, user, password);
                 resp.sendRedirect(resp.encodeRedirectURL("menu"));
             } catch (Exception e) {
                 req.setAttribute("message", e.getMessage());
