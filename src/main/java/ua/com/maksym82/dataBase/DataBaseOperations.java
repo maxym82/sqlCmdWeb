@@ -44,7 +44,7 @@ public class DataBaseOperations implements DataBaseInterface {
 
 
     @Override
-    public boolean connectToDataBase(String dataBaseName, String username, String password) throws SQLException {
+    public boolean connectToDataBase(String dataBaseName, String username, String password) {
         this.dataBaseName = dataBaseName;
         this.prop.setProperty("user", username);
         this.prop.setProperty("password", password);
@@ -54,7 +54,8 @@ public class DataBaseOperations implements DataBaseInterface {
             this.connection = DriverManager.getConnection(dbURL, prop);
             return true;
         } catch (SQLException e) {
-            throw new SQLException("something went wrong, please check your database name, user name and password\n" + e.getMessage());
+            e.printStackTrace();
+            return false;
         }
     }
 
@@ -153,13 +154,13 @@ public class DataBaseOperations implements DataBaseInterface {
         }
     }
 
-    public List<List<String>> findTable(String tableName) throws SQLException {
+    public List<List<String>> findTable(String tableName){
         return findTable(tableName, null);
     }
 
 
     @Override
-    public List<List<String>> findTable(String tableName, String condition) throws SQLException {
+    public List<List<String>> findTable(String tableName, String condition) {
         ResultSet result = null;
         String newCondition;
         List<List<String>> resultTable = new ArrayList<List<String>>();
@@ -197,7 +198,7 @@ public class DataBaseOperations implements DataBaseInterface {
                 result.close();
 
             } catch (SQLException e) {
-                throw new SQLException(e);
+                e.printStackTrace();
             }
         }
         return resultTable;

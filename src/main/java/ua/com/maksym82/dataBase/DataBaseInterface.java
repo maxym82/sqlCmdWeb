@@ -10,7 +10,7 @@ public interface DataBaseInterface {
 
     String getDataBaseName();
 
-    boolean connectToDataBase(String dataBaseName, String username, String password) throws SQLException;
+    boolean connectToDataBase(String dataBaseName, String username, String password);
 
     List<String> listTables() throws SQLException;
 
@@ -22,7 +22,7 @@ public interface DataBaseInterface {
 
     boolean createTable(String tableName, Map<String, Object> newTable) throws SQLException;
 
-    List<List<String>> findTable(String tableName, String condition) throws SQLException;
+    List<List<String>> findTable(String tableName, String condition);
 
     boolean insertROW(String tableName, Map<String, Object> newRow) throws SQLException;
 

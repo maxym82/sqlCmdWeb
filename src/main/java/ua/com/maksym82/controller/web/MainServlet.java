@@ -6,6 +6,7 @@ import ua.com.maksym82.service.ServiceInterface;
 import ua.com.maksym82.service.Service;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -26,13 +27,29 @@ public class MainServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String action = getAction(req);
 
+        DataBaseOperations dbManager = (DataBaseOperations) req.getSession().getAttribute("dataBaseManager");
+
+        if (action.startsWith("/connect")) {
+            if (dbManager == null) {
+                req.getRequestDispatcher("connect.jsp").forward(req, resp);
+            } else {
+                resp.sendRedirect(resp.encodeRedirectURL("menu"));
+            }
+            return;
+        }
+
+        if (dbManager == null) {
+            resp.sendRedirect(resp.encodeRedirectURL("connect.jsp"));
+            return;
+        }
         if (action.startsWith("/menu") || action.equals("/")) {
             req.setAttribute("items", service.commandsList());
             req.getRequestDispatcher("menu.jsp").forward(req, resp);
         } else if (action.startsWith("/help")) {
             req.getRequestDispatcher("help.jsp").forward(req, resp);
-        } else if (action.startsWith("/connect")) {
-            req.getRequestDispatcher("connect.jsp").forward(req, resp);
+        } else if (action.startsWith("/find")) {
+            req.setAttribute("table", service.find(dbManager, "songs"));
+            req.getRequestDispatcher("find.jsp").forward(req, resp);
         } else {
             req.getRequestDispatcher("error.jsp").forward(req, resp);
         }
@@ -53,7 +70,8 @@ public class MainServlet extends HttpServlet {
             String password = req.getParameter("password");
 
             try {
-                service.connect(databaseName, user, password);
+                DataBaseInterface dataBase = service.connect(databaseName, user, password);
+                req.getSession().setAttribute("dataBaseManager", dataBase);
                 resp.sendRedirect(resp.encodeRedirectURL("menu"));
             } catch (Exception e) {
                 req.setAttribute("message", e.getMessage());
