@@ -10,5 +10,8 @@ public interface ServiceInterface {
     public Object commandsList();
 
     DataBaseInterface connect(String databaseName, String userName, String password);
+
     List<List<String>> find(DataBaseOperations dataBase, String tableName);
+
+    void closeConnection(DataBaseInterface dbManager);
 }

@@ -50,6 +50,10 @@ public class MainServlet extends HttpServlet {
         } else if (action.startsWith("/find")) {
             req.setAttribute("table", service.find(dbManager, "songs"));
             req.getRequestDispatcher("find.jsp").forward(req, resp);
+        } else if (action.startsWith("/close")) {
+            service.closeConnection(dbManager);
+            req.getSession().setAttribute("dataBaseManager", null);
+            req.getRequestDispatcher("close.jsp").forward(req, resp);
         } else {
             req.getRequestDispatcher("error.jsp").forward(req, resp);
         }

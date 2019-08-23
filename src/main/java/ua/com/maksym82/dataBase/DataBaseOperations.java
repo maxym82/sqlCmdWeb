@@ -16,7 +16,7 @@ public class DataBaseOperations implements DataBaseInterface {
     }
 
     @Override
-    public boolean isDBexist(String dbName) throws SQLException {
+    public boolean isDBexist(String dbName){
         try {
             ResultSet listOfDb = null;
             if (isConnected()) {
@@ -32,7 +32,7 @@ public class DataBaseOperations implements DataBaseInterface {
                     listOfDb.close();
                 }
             } catch (SQLException e) {
-            throw new SQLException("Something went wrong\n" + e.getMessage());
+            e.printStackTrace();
         }
         return false;
     }
@@ -60,7 +60,7 @@ public class DataBaseOperations implements DataBaseInterface {
     }
 
     @Override
-    public List<String> listTables() throws SQLException {
+    public List<String> listTables(){
         List<String> listOfTables = new ArrayList<>();
         if (isConnected()) {
             try {
@@ -73,14 +73,14 @@ public class DataBaseOperations implements DataBaseInterface {
                     rs.close();
                 }
             } catch (SQLException e) {
-                throw new SQLException(e);
+                e.printStackTrace();
             }
         }
         return listOfTables;
     }
 
     @Override
-    public boolean clearTable(String tableName) throws SQLException {
+    public boolean clearTable(String tableName){
         if (isConnected()) {
             try {
                 Statement stmt = connection.createStatement();
@@ -91,7 +91,7 @@ public class DataBaseOperations implements DataBaseInterface {
                 stmt.close();
                 return true;
             } catch (SQLException e) {
-                throw new SQLException(e);
+                e.printStackTrace();
             }
 
         }
@@ -99,7 +99,7 @@ public class DataBaseOperations implements DataBaseInterface {
     }
 
     @Override
-    public boolean dropTable(String tableName) throws SQLException {
+    public boolean dropTable(String tableName) {
         if (isConnected()) {
             String stringStatement = "DROP TABLE " + tableName;
             try {
@@ -108,7 +108,8 @@ public class DataBaseOperations implements DataBaseInterface {
                 statement.close();
                 return true;
             } catch (SQLException e) {
-                throw new SQLException(e);
+                e.printStackTrace();
+                return false;
             }
         } else {
             return false;
@@ -129,7 +130,7 @@ public class DataBaseOperations implements DataBaseInterface {
 
 
     @Override
-    public boolean createTable(String tableName, Map<String, Object> newTable) throws SQLException {
+    public boolean createTable(String tableName, Map<String, Object> newTable) {
         if (isConnected()) {
             String statementString = "CREATE TABLE public." + tableName + " (";
             for (Map.Entry<String, Object> row : newTable.entrySet()) {
@@ -146,7 +147,8 @@ public class DataBaseOperations implements DataBaseInterface {
                 statement.close();
                 return true;
             } catch (SQLException e) {
-                throw new SQLException(e);
+                e.printStackTrace();
+                return false;
             }
 
         } else {
@@ -205,26 +207,26 @@ public class DataBaseOperations implements DataBaseInterface {
     }
 
     @Override
-    public boolean insertROW(String tableName, Map<String, Object> newRow) throws SQLException {
+    public boolean insertROW(String tableName, Map<String, Object> newRow){
         String statementString = "INSERT INTO " + tableName + " (";
         if (isConnected()) {
-            DatabaseMetaData dbmd = connection.getMetaData();
-            ResultSet tables = dbmd.getTables(null, null, tableName, null);
-            if (!tables.next()) {
-                throw new RuntimeException("Table \"" + tableName + "\" does not exist");
-            } else {
-                for (String rowName : newRow.keySet()) {
-                    statementString = statementString + rowName + ", ";
-
-                }
-                statementString = statementString.substring(0, statementString.length() - 2) + ") VALUES (";
-
-                for (Object rowValue : newRow.values()) {
-                    statementString = statementString + rowValue.toString() + ", ";
-                }
-                statementString = statementString.substring(0, statementString.length() - 2) + ")";
-            }
             try {
+                DatabaseMetaData dbmd = connection.getMetaData();
+                ResultSet tables = dbmd.getTables(null, null, tableName, null);
+                if (!tables.next()) {
+                    throw new RuntimeException("Table \"" + tableName + "\" does not exist");
+                } else {
+                    for (String rowName : newRow.keySet()) {
+                        statementString = statementString + rowName + ", ";
+
+                    }
+                    statementString = statementString.substring(0, statementString.length() - 2) + ") VALUES (";
+
+                    for (Object rowValue : newRow.values()) {
+                        statementString = statementString + rowValue.toString() + ", ";
+                    }
+                    statementString = statementString.substring(0, statementString.length() - 2) + ")";
+                }
                 Statement statement = this.connection.createStatement();
                 //System.out.println(statementString);
                 statement.execute(statementString);
@@ -233,7 +235,8 @@ public class DataBaseOperations implements DataBaseInterface {
                 return true;
 
             } catch (Exception e) {
-                throw new SQLException("Check data you entered\n" + e);
+                e.printStackTrace();
+                return false;
             }
         } else {
             return false;
@@ -242,7 +245,7 @@ public class DataBaseOperations implements DataBaseInterface {
     }
 
     @Override
-    public List<List<String>> updateValue(String tableName, String lookupValues, String newValues) throws SQLException {
+    public List<List<String>> updateValue(String tableName, String lookupValues, String newValues) {
         List<List<String>> updatedRow = new ArrayList<List<String>>();
         String statementString = "UPDATE " + tableName + " SET " + newValues + " WHERE " + lookupValues;
         if (isConnected()) {
@@ -254,14 +257,14 @@ public class DataBaseOperations implements DataBaseInterface {
                 statement.executeUpdate(statementString);
                 updatedRow = this.findTable(tableName, newValues);
             } catch (SQLException e) {
-                throw new SQLException("Please check data you entered\n" + e.getMessage());
+                e.printStackTrace();
             }
         }
         return updatedRow;
     }
 
     @Override
-    public List<List<String>> deleteValue(String tableName, String lookupValues) throws SQLException {
+    public List<List<String>> deleteValue(String tableName, String lookupValues) {
         List<List<String>> rowToPrint = new ArrayList<List<String>>();
         if (isConnected()) {
             try {
@@ -271,46 +274,47 @@ public class DataBaseOperations implements DataBaseInterface {
                 statement.executeUpdate("DELETE from " + tableName + " WHERE " + lookupValues);
                 statement.close();
             } catch (Exception e) {
-                throw new SQLException(e.getMessage());
+                e.printStackTrace();
             }
         }
         return rowToPrint;
     }
 
     @Override
-    public boolean closeConnection() throws SQLException {
+    public boolean closeConnection(){
         try {
             if (isConnected()) {connection.close();}
             connection = null;
             return true;
         } catch (SQLException e) {
-            throw new SQLException(e);
+            e.printStackTrace();
+            return false;
         }
     }
 
     @Override
-    public boolean createDB(String dbName) throws SQLException {
+    public boolean createDB(String dbName) {
         if (isConnected()) {
             try {
                 Statement statement = this.connection.createStatement();
                 statement.executeUpdate("CREATE DATABASE " + dbName);
                 statement.close();
             } catch (Exception e) {
-                throw new SQLException(e.getMessage());
+                e.printStackTrace();
             }
         }
         return true;
     }
 
     @Override
-    public boolean dropDB(String dbName) throws SQLException {
+    public boolean dropDB(String dbName) {
         if (isConnected()) {
             try {
                 Statement statement = this.connection.createStatement();
                 statement.executeUpdate("DROP DATABASE " + dbName);
                 statement.close();
             } catch (Exception e) {
-                throw new SQLException(e.getMessage());
+                e.printStackTrace();
             }
         }
         return true;

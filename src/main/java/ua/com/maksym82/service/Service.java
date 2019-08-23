@@ -12,8 +12,8 @@ public class Service  implements ServiceInterface{
 
     @Override
     public Object commandsList() {
-        return Arrays.asList("menu", "connect", "find", "help", "close_connection", "create_db", "create_table", "delete_value", "drop_table",
-                "drop_db", "insert_row", "list_tables", "update_value");
+        return Arrays.asList("menu", "connect", "find", "help", "create_db", "create_table", "delete_value", "drop_table",
+                "drop_db", "insert_row", "list_tables", "update_value", "close_connection");
     }
 
     @Override
@@ -25,5 +25,9 @@ public class Service  implements ServiceInterface{
 
     public List<List<String>> find(DataBaseOperations dataBase, String tableName){
         return dataBase.findTable(tableName);
+    }
+
+    public void closeConnection(DataBaseInterface dataBase) {
+        dataBase.closeConnection();
     }
 }

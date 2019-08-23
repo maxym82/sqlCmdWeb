@@ -6,33 +6,33 @@ import java.util.Map;
 
 public interface DataBaseInterface {
 
-    boolean isDBexist(String dbName) throws SQLException;
+    boolean isDBexist(String dbName);
 
     String getDataBaseName();
 
     boolean connectToDataBase(String dataBaseName, String username, String password);
 
-    List<String> listTables() throws SQLException;
+    List<String> listTables();
 
-    boolean clearTable(String tableName) throws SQLException;
+    boolean clearTable(String tableName);
 
-    boolean dropTable(String tableName) throws SQLException;
+    boolean dropTable(String tableName);
 
     boolean isConnected ();
 
-    boolean createTable(String tableName, Map<String, Object> newTable) throws SQLException;
+    boolean createTable(String tableName, Map<String, Object> newTable);
 
     List<List<String>> findTable(String tableName, String condition);
 
-    boolean insertROW(String tableName, Map<String, Object> newRow) throws SQLException;
+    boolean insertROW(String tableName, Map<String, Object> newRow);
 
-    List<List<String>> updateValue(String tableName, String condition, String newValue) throws SQLException;
+    List<List<String>> updateValue(String tableName, String condition, String newValue);
 
-    List<List<String>> deleteValue(String tableName, String lookupValues) throws SQLException;
+    List<List<String>> deleteValue(String tableName, String lookupValues);
 
-    boolean closeConnection() throws SQLException;
+    boolean closeConnection();
 
-    boolean createDB(String dbName) throws SQLException;
+    boolean createDB(String dbName);
 
-    boolean dropDB(String dbName) throws SQLException;
+    boolean dropDB(String dbName);
 }
