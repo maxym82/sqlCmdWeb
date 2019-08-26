@@ -27,13 +27,10 @@ public class DropDB implements Command {
         if (command.size() < 2) {
             console.outputln("Command format is wrong... Pleae type \'help\' for help");
         } else {
-            try {
-                if (dataBase.dropDB(command.get(1))) {
-                    console.outputln("Data Base '" + command.get(1) + "' has been deleted");
-                }
-            } catch (SQLException e) {
-                console.outputln(e.toString());
+            if (dataBase.dropDB(command.get(1))) {
+                console.outputln("Data Base '" + command.get(1) + "' has been deleted");
             }
+
         }
 
     }

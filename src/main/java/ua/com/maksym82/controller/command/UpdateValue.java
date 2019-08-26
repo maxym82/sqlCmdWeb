@@ -27,7 +27,6 @@ public class UpdateValue implements Command {
         if (command.size() != 4) {
             console.outputln("Command format is wrong... Pleae type \'help\' for help");
         } else {
-            try {
                 // update table1 column1|'roadHouse' column2|123
                 String lookupCondition;
                 String newValues;
@@ -39,9 +38,6 @@ public class UpdateValue implements Command {
                 console.outputln("New row:");
                 console.outputln(newTable);
 
-            } catch (SQLException e) {
-                console.outputln(e.getMessage());
-            }
         }
 
     }

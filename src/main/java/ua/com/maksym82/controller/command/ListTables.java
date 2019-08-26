@@ -31,21 +31,16 @@ public class ListTables implements Command {
         } else {
             int counter = 1;
             console.outputln(String.format("On Data Base \" %s \" you can find this tables available: ", this.dataBase.getDataBaseName()));
-            try {
-                List<String> tables = dataBase.listTables();
-                if (tables.size() == 0) {
-                    console.outputln("No tables available. DB is empty");
-                } else {
-                    for (String tableName : tables) {
-                        console.outputln("+" + "-".repeat(tableName.length() + 11) + "+");
-                        console.output("| " + counter++ + " |");
-                        console.outputln("    " + tableName + "   |");
-                        console.outputln("+" + "-".repeat(tableName.length() + 11) + "+");
-                    }
+            List<String> tables = dataBase.listTables();
+            if (tables.size() == 0) {
+                console.outputln("No tables available. DB is empty");
+            } else {
+                for (String tableName : tables) {
+                    console.outputln("+" + "-".repeat(tableName.length() + 11) + "+");
+                    console.output("| " + counter++ + " |");
+                    console.outputln("    " + tableName + "   |");
+                    console.outputln("+" + "-".repeat(tableName.length() + 11) + "+");
                 }
-
-            } catch (SQLException e) {
-                console.outputln(e.getMessage());
             }
         }
     }
